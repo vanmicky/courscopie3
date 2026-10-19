@@ -1,0 +1,93 @@
+/* ==========================================================================
+   V109 — QCM : vert et rouge plus francs
+   --------------------------------------------------------------------------
+   Le thème monochrome utilisait un vert et un rouge très désaturés : sur un
+   QCM, « réussi » et « à revoir » se distinguaient mal. On emploie ici des
+   verts et des rouges nettement plus foncés, réservés au QCM.
+   ========================================================================== */
+
+/* --- Réponses d'un QCM (interactif et correction) ------------------------ */
+.qcm-choice.is-correct {
+  border-color: #86efac !important;
+  background: #f0fdf4 !important;
+  color: #14532d !important;
+}
+.qcm-choice.is-correct .qcm-choice-letter {
+  border-color: #15803d !important;
+  background: #15803d !important;
+  color: #ffffff !important;
+}
+.qcm-choice.is-wrong {
+  border-color: #fca5a5 !important;
+  background: #fef2f2 !important;
+  color: #7f1d1d !important;
+}
+.qcm-choice.is-wrong .qcm-choice-letter {
+  border-color: #b91c1c !important;
+  background: #b91c1c !important;
+  color: #ffffff !important;
+}
+.qcm-choice.is-correct strong,
+.qcm-choice.is-wrong strong { color: inherit !important; }
+
+/* --- Pastilles du bilan : « Réussi » / « À revoir » ---------------------- */
+.status-pill.is-qcm-good {
+  border: 1px solid #86efac !important;
+  background: #f0fdf4 !important;
+  color: #14532d !important;
+}
+.status-pill.is-qcm-bad {
+  border: 1px solid #fca5a5 !important;
+  background: #fef2f2 !important;
+  color: #7f1d1d !important;
+}
+
+/* --- Bandeau de résultat ------------------------------------------------ */
+.qcm-result-percent { color: #14532d !important; }
+.qcm-result[data-level="low"] .qcm-result-percent { color: #7f1d1d !important; }
+
+/* --- Mode sombre : mêmes teintes, éclaircies pour rester lisibles -------- */
+html.dark .qcm-choice.is-correct {
+  border-color: #166534 !important;
+  background: #052e16 !important;
+  color: #bbf7d0 !important;
+}
+html.dark .qcm-choice.is-correct .qcm-choice-letter {
+  border-color: #16a34a !important;
+  background: #16a34a !important;
+  color: #052e16 !important;
+}
+html.dark .qcm-choice.is-wrong {
+  border-color: #7f1d1d !important;
+  background: #2a0a0a !important;
+  color: #fecaca !important;
+}
+html.dark .qcm-choice.is-wrong .qcm-choice-letter {
+  border-color: #dc2626 !important;
+  background: #dc2626 !important;
+  color: #1a0505 !important;
+}
+html.dark .status-pill.is-qcm-good {
+  border-color: #166534 !important;
+  background: #052e16 !important;
+  color: #bbf7d0 !important;
+}
+html.dark .status-pill.is-qcm-bad {
+  border-color: #7f1d1d !important;
+  background: #2a0a0a !important;
+  color: #fecaca !important;
+}
+html.dark .qcm-result-percent { color: #bbf7d0 !important; }
+html.dark .qcm-result[data-level="low"] .qcm-result-percent { color: #fecaca !important; }
+
+/* Illustration d'une question de QCM. */
+.qcm-question-image { margin: 0 0 1rem; }
+.qcm-question-image img {
+  height: auto;
+  max-width: 100%;
+  max-height: 46vh;
+  object-fit: contain;
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-surface);
+}

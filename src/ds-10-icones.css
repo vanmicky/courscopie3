@@ -1,0 +1,153 @@
+/* ==========================================================================
+   V87 — Couleur de matière dans la navigation, icônes partout
+   --------------------------------------------------------------------------
+   • le menu du haut prend la couleur du niveau survolé ;
+   • les pastilles (onglets de chapitre, outils, sommaire de fiche) portent une
+     icône et s'éclairent de la couleur de la matière ;
+   • le logo « MG » prend la couleur de la matière de la page ;
+   • un jeu d'icônes SVG maison remplace les emoji de l'interface.
+
+   Les icônes sont dans includes/icons.php ; elles utilisent `currentColor`,
+   donc elles suivent automatiquement la couleur de leur contexte.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Icônes
+   -------------------------------------------------------------------------- */
+.icon {
+  display: inline-block;
+  flex: none;
+  width: 1.25em;
+  height: 1.25em;
+  vertical-align: -0.2em;
+}
+.nav-icon { width: 1.05rem; height: 1.05rem; vertical-align: -0.18em; }
+.theme-icon { width: 1.1rem; height: 1.1rem; }
+.icon-sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+/* --------------------------------------------------------------------------
+   2. Menu du haut : la couleur du niveau au survol
+   --------------------------------------------------------------------------
+   Chaque lien de niveau porte son `--accent` en ligne. Les liens « Méthodes »
+   et « Outils » héritent de l'accent de la page (`--accent` sur <body>), sinon
+   de la couleur de marque.
+   -------------------------------------------------------------------------- */
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+}
+.nav-dot {
+  width: .48rem;
+  height: .48rem;
+  border-radius: 50%;
+  background: var(--accent, var(--ds-brand));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent, var(--ds-brand)) 16%, transparent);
+  transition: transform var(--ds-motion-fast) var(--ds-ease),
+              box-shadow var(--ds-motion-fast) var(--ds-ease);
+}
+
+.nav-link:hover {
+  background: color-mix(in srgb, var(--accent, var(--ds-brand)) 11%, var(--ds-surface)) !important;
+  color: var(--accent-ink, var(--ds-brand-ink)) !important;
+  border-color: color-mix(in srgb, var(--accent, var(--ds-brand)) 30%, var(--ds-border)) !important;
+}
+.nav-link:hover .nav-dot {
+  transform: scale(1.25);
+  box-shadow: 0 0 0 5px color-mix(in srgb, var(--accent, var(--ds-brand)) 20%, transparent);
+}
+.nav-link:hover .icon { color: inherit; }
+
+/* Lien courant : même logique, un cran plus affirmé. */
+.nav-link[aria-current="page"],
+.nav-link[aria-current="true"] {
+  background: color-mix(in srgb, var(--accent, var(--ds-brand)) 14%, var(--ds-surface)) !important;
+  color: var(--accent-ink, var(--ds-brand-ink)) !important;
+  border-color: color-mix(in srgb, var(--accent, var(--ds-brand)) 34%, var(--ds-border)) !important;
+}
+.nav-link[aria-current="page"] .nav-dot,
+.nav-link[aria-current="true"] .nav-dot {
+  background: var(--accent-deep, var(--ds-brand-strong));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent, var(--ds-brand)) 26%, transparent);
+}
+
+/* Mobile : mêmes couleurs, sans la pastille de couleur. */
+.mobile-nav .nav-dot { display: none; }
+
+/* --------------------------------------------------------------------------
+   3. Pastilles : couleur de matière + icône
+   -------------------------------------------------------------------------- */
+.chapter-tab { gap: .45rem; }
+.chapter-tab .chapter-tab-icon {
+  width: 1.05rem;
+  height: 1.05rem;
+  flex: none;
+  color: var(--accent-deep, var(--ds-brand-strong));
+  transition: color var(--ds-motion-fast) var(--ds-ease);
+}
+.chapter-tab:hover {
+  background: color-mix(in srgb, var(--accent, var(--ds-brand)) 9%, var(--ds-surface-2)) !important;
+  color: var(--accent-ink, var(--ds-text)) !important;
+}
+.chapter-tab:hover .chapter-tab-icon { color: var(--accent-deep, var(--ds-brand-strong)); }
+.chapter-tab.is-active .chapter-tab-icon { color: #fff; }
+
+/* Sommaire de la fiche méthode : mêmes pastilles. */
+.learn2-nav a { display: inline-flex; align-items: center; gap: .4rem; }
+
+/* --------------------------------------------------------------------------
+   4. Le logo « MG » prend la couleur de la matière
+   --------------------------------------------------------------------------
+   Sans accent de page, il garde le dégradé de marque indigo → violet. Sur une
+   page de niveau, de chapitre ou de fiche, il reprend la teinte de la matière.
+   -------------------------------------------------------------------------- */
+.logo-mark {
+  background-image: linear-gradient(135deg,
+    color-mix(in srgb, var(--accent, var(--ds-brand)) 62%, #ffffff) 0%,
+    var(--accent-deep, var(--ds-brand-strong)) 100%) !important;
+  transition: transform var(--ds-motion) var(--ds-ease),
+              box-shadow var(--ds-motion) var(--ds-ease),
+              filter var(--ds-motion) var(--ds-ease);
+}
+.site-brand:hover .logo-mark {
+  transform: rotate(-3deg) scale(1.05);
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--accent, var(--ds-brand)) 32%, transparent);
+  filter: saturate(1.15);
+}
+.site-footer .logo-mark { transition: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-dot, .chapter-tab .chapter-tab-icon, .logo-mark { transition: none; }
+  .site-brand:hover .logo-mark { transform: none; }
+}
+
+/* Boutons et liens : l'icône s'aligne sur le texte. */
+.btn-icon, .link-icon, .footer-icon {
+  width: 1rem;
+  height: 1rem;
+  margin-right: .4rem;
+  vertical-align: -0.16em;
+}
+.link-icon { margin-right: 0; margin-left: .35rem; transition: transform var(--ds-motion-fast) var(--ds-ease); }
+.editorial-card-link:hover .link-icon, .chapter-actions a:hover .link-icon { transform: translateX(3px); }
+
+/* Liens du pied de page. */
+.site-footer-links a { display: inline-flex; align-items: center; }
+.site-footer-links a .footer-icon { opacity: .75; }
+
+/* L'icône du bouton actif sur fond plein garde la couleur du texte. */
+.btn-primary .btn-icon, .chapter-tab.is-active .btn-icon { color: currentColor; }
+
+@media (prefers-reduced-motion: reduce) {
+  .link-icon { transition: none; }
+  .editorial-card-link:hover .link-icon { transform: none; }
+}
+
+/* Titres de section : l'icône reprend la couleur de la matière. */
+.heading-icon {
+  width: 1.35rem;
+  height: 1.35rem;
+  margin-right: .5rem;
+  vertical-align: -0.22em;
+  color: var(--accent-deep, var(--ds-brand-strong));
+}

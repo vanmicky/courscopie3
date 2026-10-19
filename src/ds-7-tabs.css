@@ -1,0 +1,97 @@
+/* ==========================================================================
+   V80 — Onglets horizontaux des pages chapitre
+   --------------------------------------------------------------------------
+   Une page chapitre empilait 6 a 8 sections : il fallait faire defiler pour
+   trouver les QCM ou les flashcards. La barre d'onglets remplace ce defilement
+   par des pastilles horizontales, collantes sous l'en-tete.
+
+   Amelioration progressive : la barre est un simple jeu de liens d'ancre dans
+   le HTML. Sans JavaScript, elle fait defiler la page comme avant ; avec
+   JavaScript, chapter-tabs.js la transforme en jeu d'onglets.
+   ========================================================================== */
+
+.chapter-tabs {
+  position: sticky;
+  top: var(--ds-header-h);
+  z-index: 40;
+  display: flex;
+  gap: var(--ds-space-2);
+  margin-top: var(--ds-space-6);
+  padding: var(--ds-space-2);
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-pill);
+  background: color-mix(in srgb, var(--ds-surface) 93%, transparent);
+  box-shadow: var(--ds-shadow-card);
+  backdrop-filter: saturate(1.4) blur(12px);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.chapter-tabs::-webkit-scrollbar { display: none; }
+
+.chapter-tab {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: .45rem;
+  min-height: 2.5rem;
+  padding: .45rem .85rem;
+  border: 1px solid transparent;
+  border-radius: var(--ds-radius-pill);
+  color: var(--ds-text-soft) !important;
+  font-size: .875rem;
+  font-weight: 650;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background var(--ds-motion-fast) var(--ds-ease),
+              color var(--ds-motion-fast) var(--ds-ease),
+              box-shadow var(--ds-motion-fast) var(--ds-ease);
+}
+.chapter-tab:hover { background: var(--ds-surface-2); color: var(--ds-text) !important; }
+
+.chapter-tab.is-active {
+  background: var(--accent-deep, var(--ds-brand-strong));
+  color: #fff !important;
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--accent, var(--ds-brand)) 30%, transparent);
+}
+
+.chapter-tab-icon { font-size: .95rem; line-height: 1; }
+
+.chapter-tab-count {
+  display: inline-grid;
+  place-items: center;
+  min-width: 1.35rem;
+  height: 1.35rem;
+  padding-inline: .35rem;
+  border-radius: var(--ds-radius-pill);
+  background: var(--ds-surface-3);
+  color: var(--ds-text-soft);
+  font-size: .72rem;
+  font-weight: 750;
+}
+.chapter-tab.is-active .chapter-tab-count { background: rgba(255, 255, 255, .24); color: #fff; }
+
+/* Les panneaux : un seul visible a la fois une fois JavaScript actif. */
+.chapter-panels { position: relative; }
+.chapter-panels > .chapter-resource-section { scroll-margin-top: calc(var(--ds-header-h) + 5.5rem); }
+
+/* Le titre de section sert de repere en haut de l'onglet : on le garde compact. */
+.chapter-panels .chapter-section-heading { margin-bottom: 0; }
+
+@media (max-width: 640px) {
+  .chapter-tabs { margin-inline: calc(-1 * var(--ds-space-4)); border-radius: 0; border-inline: 0; padding-inline: var(--ds-space-4); }
+  .chapter-tab { font-size: .82rem; padding: .4rem .7rem; }
+  .chapter-tab-icon { display: none; }
+}
+
+/* Impression : on imprime tout le chapitre, pas seulement l'onglet ouvert. */
+@media print {
+  .chapter-tabs { display: none !important; }
+  .chapter-panels > .chapter-resource-section,
+  .chapter-panels > .chapter-resource-section[hidden] { display: block !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chapter-tab { transition: none; }
+}

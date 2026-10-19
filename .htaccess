@@ -1,0 +1,101 @@
+# Les cours de M. Gedion — configuration Apache (hebergement mutualise)
+# Ce fichier fonctionne aussi bien a la racine du domaine que dans un sous-dossier :
+# aucune directive ne depend d'un chemin absolu.
+
+DirectoryIndex index.php
+
+# ---------------------------------------------------------------------------
+# Types MIME explicites
+# Certains hebergements servent le CSS et le JS en text/plain ou text/html :
+# le navigateur refuse alors la feuille de style (strict MIME checking).
+# ---------------------------------------------------------------------------
+<IfModule mod_mime.c>
+  AddType text/css .css
+  AddType application/javascript .js
+  AddType application/manifest+json .webmanifest
+  AddType font/woff2 .woff2
+  AddType image/svg+xml .svg
+  AddType image/webp .webp
+  AddType image/avif .avif
+</IfModule>
+Options -Indexes
+AddDefaultCharset UTF-8
+
+# ---------------------------------------------------------------------------
+# Fichiers de travail jamais servis aux visiteurs
+# ---------------------------------------------------------------------------
+<FilesMatch "\.(sql|md|zip)$">
+  Require all denied
+</FilesMatch>
+
+<FilesMatch "^(config\.local\.php|config\.example\.php|config\.local\.example\.php)$">
+  Require all denied
+</FilesMatch>
+
+# ---------------------------------------------------------------------------
+# Compression a la volee (HTML, CSS, JS, SVG, JSON)
+# Les images bitmap et les polices woff2 sont deja compressees : inutile.
+# ---------------------------------------------------------------------------
+<IfModule mod_deflate.c>
+  <IfModule mod_filter.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/css text/xml
+    AddOutputFilterByType DEFLATE application/javascript application/json
+    AddOutputFilterByType DEFLATE image/svg+xml application/manifest+json
+  </IfModule>
+</IfModule>
+
+# ---------------------------------------------------------------------------
+# Cache navigateur
+# CSS et JS sont appeles avec ?v=NN : un mois de cache est sans risque.
+# ---------------------------------------------------------------------------
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css "access plus 30 days"
+  ExpiresByType application/javascript "access plus 30 days"
+  ExpiresByType text/javascript "access plus 30 days"
+  ExpiresByType font/woff2 "access plus 1 year"
+  ExpiresByType image/webp "access plus 30 days"
+  ExpiresByType image/jpeg "access plus 30 days"
+  ExpiresByType image/png "access plus 30 days"
+  ExpiresByType image/svg+xml "access plus 30 days"
+  ExpiresByType image/x-icon "access plus 1 year"
+  ExpiresByType text/html "access plus 0 seconds"
+</IfModule>
+
+<IfModule mod_headers.c>
+  <FilesMatch "\.(css|js)$">
+    Header set Cache-Control "public, max-age=2592000"
+  </FilesMatch>
+  <FilesMatch "\.(webp|jpe?g|png|svg|ico)$">
+    Header set Cache-Control "public, max-age=2592000"
+  </FilesMatch>
+  <FilesMatch "\.woff2$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  <FilesMatch "\.(php|html)$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+</IfModule>
+
+# ---------------------------------------------------------------------------
+# Page 404
+# Seules les URL de navigation (sans extension) sont redirigees : un fichier
+# absent (.css, .jpg) doit continuer a renvoyer un vrai 404.
+# ---------------------------------------------------------------------------
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # robots.txt et sitemap.xml sont generes par PHP (le domaine n'est pas connu a l'avance)
+  RewriteRule ^robots\.txt$ robots.php [L]
+  RewriteRule ^sitemap\.xml$ sitemap.php [L]
+
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_URI} !\.[a-zA-Z0-9]{2,5}$
+  RewriteRule ^ 404.php [L]
+</IfModule>

@@ -1,0 +1,3 @@
+-- Migration V54 -> V55
+-- Aucune modification de structure n'est necessaire.
+-- V55 ameliore surtout l'interface admin, les filtres et l'aide a l'edition LaTeX.

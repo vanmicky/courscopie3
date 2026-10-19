@@ -1,0 +1,1312 @@
+/* ==========================================================================
+   V97 — Direction artistique de l'administration
+   --------------------------------------------------------------------------
+   Portée : `.admin-area` uniquement. Le site public n'est pas touché.
+
+   Ambiance retenue : « atelier tech et épuré ».
+     • neutres froids (gris légèrement bleutés), aucune décoration ;
+     • surfaces blanches, bordures fines, ombres quasi imperceptibles ;
+     • une seule couleur d'accent, réservée aux liens, états actifs et focus ;
+     • hiérarchie portée par la typographie et l'espace, pas par les cadres.
+
+   Spécification complète : DESIGN-ADMIN.md
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Jetons — échelle de gris froids, une seule couleur d'accent
+   -------------------------------------------------------------------------- */
+.admin-area {
+  --a-bg: #f6f7f9;
+  --a-surface: #ffffff;
+  --a-surface-2: #f9fafb;
+  --a-surface-3: #f2f4f7;
+  --a-text: #14161a;
+  --a-text-2: #5b6270;
+  --a-text-3: #6b7280;
+  --a-border: #e4e7ec;
+  --a-border-strong: #d0d5dd;
+  --a-primary: #18181b;
+  --a-primary-hover: #2c2c31;
+  --a-accent: #2563eb;
+  --a-accent-soft: #eef3ff;
+
+  /* Formes */
+  --a-radius-sm: 8px;
+  --a-radius: 14px;
+  --a-radius-pill: 999px;
+
+  /* Ombres : deux couches très légères, jamais plus */
+  --a-shadow: 0 1px 2px rgba(16, 24, 40, .04), 0 1px 3px rgba(16, 24, 40, .03);
+  --a-shadow-hover: 0 4px 12px rgba(16, 24, 40, .07), 0 1px 3px rgba(16, 24, 40, .04);
+
+  /* Rythme vertical (loi de proximité) */
+  --a-gap-1: 4px;
+  --a-gap-2: 8px;
+  --a-gap-3: 12px;
+  --a-gap-4: 16px;
+  --a-gap-5: 24px;
+  --a-gap-6: 32px;
+  --a-gap-7: 48px;
+
+  background: var(--a-bg);
+}
+
+html.dark .admin-area {
+  --a-bg: #0b0c0f;
+  --a-surface: #131519;
+  --a-surface-2: #171a1f;
+  --a-surface-3: #1d2127;
+  --a-text: #f3f4f6;
+  --a-text-2: #a8afbd;
+  --a-text-3: #9aa1ad;
+  --a-border: #242830;
+  --a-border-strong: #333945;
+  --a-primary: #fafafa;
+  --a-primary-hover: #e4e4e7;
+  --a-accent: #7aa2ff;
+  --a-accent-soft: #16203a;
+  --a-shadow: none;
+  --a-shadow-hover: none;
+}
+
+/* On aligne les jetons du design system public sur ceux de l'admin : les
+   composants existants suivent alors la nouvelle direction sans être réécrits. */
+.admin-area {
+  --ds-bg: var(--a-bg);
+  --ds-surface: var(--a-surface);
+  --ds-surface-2: var(--a-surface-2);
+  --ds-surface-3: var(--a-surface-3);
+  --ds-text: var(--a-text);
+  --ds-text-soft: var(--a-text-2);
+  --ds-text-faint: var(--a-text-3);
+  --ds-border: var(--a-border);
+  --ds-border-strong: var(--a-border-strong);
+  --ds-brand: var(--a-primary);
+  --ds-brand-strong: var(--a-primary);
+  --ds-brand-soft: var(--a-surface-3);
+  --ds-brand-border: var(--a-border-strong);
+  --ds-brand-ink: var(--a-text);
+  --ds-radius-sm: var(--a-radius-sm);
+  --ds-radius: var(--a-radius);
+  --ds-radius-lg: var(--a-radius);
+  --ds-radius-xl: var(--a-radius);
+}
+
+/* --------------------------------------------------------------------------
+   2. En-tête de page : compact, sans carton
+   --------------------------------------------------------------------------
+   Les pages d'administration utilisaient le grand bandeau du site public :
+   badge « Admin », titre surdimensionné, cadre et ombre. On le remplace par un
+   en-tête de 56 px, séparé du contenu par un filet — l'œil va droit aux données.
+   -------------------------------------------------------------------------- */
+.admin-area .work-global-hero {
+  /* Empilement vertical : titre, puis description. Un `flex` avec
+     `space-between` rejetait la description à l'extrême droite. */
+  display: block !important;
+  padding: 0 0 var(--a-gap-4) !important;
+  margin-bottom: var(--a-gap-5) !important;
+  border: 0 !important;
+  border-bottom: 1px solid var(--a-border) !important;
+  border-radius: 0 !important;
+  background: none !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+/* Barre d'accent de 4 px héritée du site public : elle chevauchait le titre
+   depuis la suppression du rembourrage. */
+.admin-area .work-global-hero::after { display: none !important; }
+/* Badge et accroche décorative : du bruit sur une page outil. */
+.admin-area .work-global-hero > .badge,
+.admin-area .work-global-hero > span.badge { display: none !important; }
+
+.admin-area .work-global-hero .page-title {
+  margin: 0 !important;
+  font-size: 1.3rem !important;
+  font-weight: 750 !important;
+  line-height: 1.2 !important;
+  letter-spacing: -.02em !important;
+  max-width: none !important;
+  color: var(--a-text) !important;
+}
+.admin-area .work-global-hero .muted {
+  margin: .2rem 0 0 !important;
+  max-width: 62ch;
+  color: var(--a-text-2) !important;
+  font-size: .875rem !important;
+  line-height: 1.5 !important;
+}
+
+/* --------------------------------------------------------------------------
+   3. Typographie et densité
+   -------------------------------------------------------------------------- */
+.admin-area { font-size: 14px; }
+.admin-area .section-title,
+.admin-area h2.section-title {
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+  letter-spacing: -.01em !important;
+}
+.admin-area h3 { font-size: .95rem !important; font-weight: 680 !important; }
+.admin-area .muted { color: var(--a-text-2) !important; }
+
+/* Étiquette de section : petites capitales, très discrètes. */
+.admin-area .badge,
+.admin-area .section-eyebrow {
+  border: 0 !important;
+  background: var(--a-surface-3) !important;
+  color: var(--a-text-2) !important;
+  border-radius: var(--a-radius-pill) !important;
+  font-size: .68rem !important;
+  font-weight: 700 !important;
+  letter-spacing: .04em !important;
+  text-transform: uppercase;
+  padding: .18rem .5rem !important;
+}
+
+/* --------------------------------------------------------------------------
+   4. Surfaces : cartes sobres
+   -------------------------------------------------------------------------- */
+.admin-area .card,
+.admin-area .student-empty {
+  border: 1px solid var(--a-border) !important;
+  border-radius: var(--a-radius) !important;
+  background: var(--a-surface) !important;
+  background-image: none !important;
+  box-shadow: var(--a-shadow) !important;
+}
+.admin-area .card:hover { box-shadow: var(--a-shadow) !important; transform: none !important; }
+
+/* Les groupes de champs respirent : 24 px entre sections, 12 px entre champs. */
+.admin-area .card > * + * { margin-top: var(--a-gap-4); }
+.admin-area form .field + .field { margin-top: var(--a-gap-3); }
+
+/* --------------------------------------------------------------------------
+   5. Bandeau de chiffres clés
+   --------------------------------------------------------------------------
+   Dix cartes flottantes produisaient du bruit. Les statistiques deviennent une
+   seule surface, divisée par des filets : lecture immédiate, en un coup d'œil.
+   -------------------------------------------------------------------------- */
+.admin-area .stat-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr));
+  gap: 1px !important;
+  border: 1px solid var(--a-border) !important;
+  border-radius: var(--a-radius) !important;
+  background: var(--a-border) !important;
+  overflow: hidden;
+  box-shadow: var(--a-shadow) !important;
+}
+.admin-area .stat-card {
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: var(--a-surface) !important;
+  box-shadow: none !important;
+  padding: .85rem 1rem !important;
+  display: grid;
+  gap: .1rem;
+  text-align: left;
+}
+.admin-area .stat-card:hover { background: var(--a-surface-2) !important; transform: none !important; }
+.admin-area .stat-card .stat-label {
+  order: 2;
+  color: var(--a-text-2) !important;
+  font-size: .72rem !important;
+  font-weight: 650 !important;
+  letter-spacing: .03em;
+  text-transform: uppercase;
+}
+.admin-area .stat-card .stat-value {
+  order: 1;
+  color: var(--a-text) !important;
+  font-size: 1.5rem !important;
+  font-weight: 750 !important;
+  line-height: 1.1 !important;
+  font-variant-numeric: tabular-nums;
+}
+.admin-area .stat-card .stat-hint { display: none !important; }
+
+/* --------------------------------------------------------------------------
+   6. Actions
+   -------------------------------------------------------------------------- */
+.admin-area .btn-primary,
+.admin-area .btn-secondary,
+.admin-area .btn-danger {
+  height: 2.5rem;
+  padding-inline: 1rem;
+  border-radius: var(--a-radius-sm) !important;
+  font-size: .875rem !important;
+  font-weight: 600 !important;
+  box-shadow: none !important;
+}
+.admin-area .btn-primary {
+  background: var(--a-primary) !important;
+  border: 1px solid var(--a-primary) !important;
+  color: #ffffff !important;
+}
+html.dark .admin-area .btn-primary { color: #14161a !important; }
+.admin-area .btn-primary:hover { background: var(--a-primary-hover) !important; border-color: var(--a-primary-hover) !important; }
+.admin-area .btn-secondary {
+  background: var(--a-surface) !important;
+  border: 1px solid var(--a-border-strong) !important;
+  color: var(--a-text) !important;
+}
+.admin-area .btn-secondary:hover { background: var(--a-surface-2) !important; border-color: var(--a-text-3) !important; }
+
+/* Actions rapides du tableau de bord : quatre choix, alignés, sans ombre. */
+.admin-area .dashboard-action {
+  border: 1px solid var(--a-border) !important;
+  border-radius: var(--a-radius) !important;
+  background: var(--a-surface) !important;
+  box-shadow: none !important;
+  padding: var(--a-gap-4) !important;
+}
+.admin-area .dashboard-action:hover { border-color: var(--a-border-strong) !important; background: var(--a-surface-2) !important; transform: none !important; }
+.admin-area .dashboard-action-icon { color: var(--a-accent) !important; width: 1.25rem !important; height: 1.25rem !important; }
+
+/* --------------------------------------------------------------------------
+   7. Champs de formulaire
+   -------------------------------------------------------------------------- */
+.admin-area input:not([type=checkbox]):not([type=radio]):not([type=submit]),
+.admin-area select,
+.admin-area textarea {
+  height: 2.5rem;
+  padding: .4rem .75rem;
+  border: 1px solid var(--a-border-strong) !important;
+  border-radius: var(--a-radius-sm) !important;
+  background: var(--a-surface) !important;
+  background-image: none !important;
+  color: var(--a-text) !important;
+  font-size: .875rem !important;
+}
+.admin-area textarea { height: auto; min-height: 7rem; line-height: 1.6; }
+.admin-area input:focus-visible,
+.admin-area select:focus-visible,
+.admin-area textarea:focus-visible {
+  outline: none !important;
+  border-color: var(--a-accent) !important;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--a-accent) 16%, transparent) !important;
+}
+.admin-area label { font-size: .8125rem !important; font-weight: 600 !important; color: var(--a-text-2) !important; }
+
+/* --------------------------------------------------------------------------
+   8. Tableaux
+   -------------------------------------------------------------------------- */
+.admin-area table { width: 100%; border-collapse: collapse; font-size: .875rem; }
+.admin-area thead th {
+  padding: .5rem .75rem;
+  border: 0 !important;
+  border-bottom: 1px solid var(--a-border) !important;
+  background: none !important;
+  color: var(--a-text-3) !important;
+  font-size: .7rem !important;
+  font-weight: 700 !important;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  text-align: left;
+}
+.admin-area tbody td { padding: .65rem .75rem; border-bottom: 1px solid var(--a-border); }
+.admin-area tbody tr:last-child td { border-bottom: 0; }
+.admin-area tbody tr:hover { background: var(--a-surface-2); }
+
+/* --------------------------------------------------------------------------
+   9. Menu latéral
+   -------------------------------------------------------------------------- */
+.admin-area .admin-sidebar {
+  border-right: 1px solid var(--a-border) !important;
+  background: var(--a-surface) !important;
+  box-shadow: none !important;
+  padding: var(--a-gap-4) !important;
+}
+.admin-area .admin-brand { border-bottom: 1px solid var(--a-border); padding-bottom: var(--a-gap-3); }
+.admin-area .admin-brand strong { font-size: .875rem; letter-spacing: -.01em; }
+
+/* --------------------------------------------------------------------------
+   10. Nettoyage : plus de dégradés ni de halos dans l'admin
+   -------------------------------------------------------------------------- */
+.admin-area body,
+.admin-area .admin-area { background-image: none !important; }
+.admin-area .exam-entry,
+.admin-area .dashboard-pilotage {
+  border: 1px solid var(--a-border) !important;
+  border-radius: var(--a-radius) !important;
+  background: var(--a-surface) !important;
+  background-image: none !important;
+  box-shadow: var(--a-shadow) !important;
+}
+
+/* Le sigle du logo reste blanc sur son aplat sombre. */
+.admin-area .logo-mark,
+.admin-area .admin-brand span { color: #ffffff !important; }
+.admin-area small { color: var(--a-text-2) !important; }
+
+/* Points de rupture : sur téléphone, tout s'empile et reste aéré. */
+@media (max-width: 700px) {
+  .admin-area .stat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* --------------------------------------------------------------------------
+   11. Correctifs de contraste (relevés par l'audit automatique)
+   -------------------------------------------------------------------------- */
+/* Compteur du menu : le gris clair tombait à 2,84:1 sur la pastille. */
+.admin-area .admin-nav-count {
+  background: var(--a-surface-3);
+  color: var(--a-text-2);
+  font-weight: 700;
+}
+/* Étiquette de type dans la médiathèque. */
+.admin-area .media-picker-item .media-kind,
+.admin-area .media-kind {
+  background: var(--a-surface-3) !important;
+  color: var(--a-text-2) !important;
+  border: 0 !important;
+}
+/* Pastilles d'état : textein plus sombre, bordures discrètes. */
+.admin-area .status-pill,
+.admin-area .status-pill.is-success,
+.admin-area .status-pill.is-live {
+  background: var(--a-surface-3) !important;
+  border-color: var(--a-border) !important;
+  color: var(--a-text) !important;
+}
+.admin-area .status-pill.is-draft { background: var(--a-surface-3) !important; border-color: var(--a-border) !important; color: var(--a-text) !important; }
+.admin-area .status-pill.is-danger { background: var(--a-surface-3) !important; border-color: var(--a-border) !important; color: var(--a-text) !important; }
+html.dark .admin-area .status-pill,
+html.dark .admin-area .status-pill.is-success,
+html.dark .admin-area .status-pill.is-live,
+html.dark .admin-area .status-pill.is-draft { color: var(--a-text) !important; }
+
+/* Panneau d'état du système : la couche historique impose un fond bleu nuit et
+   du texte ardoise en dur. On le ramène sur les surfaces de l'admin. */
+.admin-area .system-info-grid > div {
+  background: var(--a-surface-2) !important;
+  border: 1px solid var(--a-border) !important;
+  border-radius: var(--a-radius-sm) !important;
+  color: var(--a-text) !important;
+}
+.admin-area .system-info-grid span { color: var(--a-text-2) !important; }
+.admin-area .system-info-grid strong { color: var(--a-text) !important; }
+
+/* Le sigle du menu a un dégradé en fond : on lui donne aussi une couleur de
+   base explicite, pour que son contraste soit mesurable (et non plus approximé
+   sur le fond blanc du panneau). */
+.admin-area .admin-brand span {
+  background-color: var(--a-primary) !important;
+  color: #ffffff !important;
+}
+
+/* --------------------------------------------------------------------------
+   12. Barre latérale permanente
+   --------------------------------------------------------------------------
+   Les sections repliables demandaient un clic pour voir la suite. Sur
+   ordinateur, tout le menu est désormais visible d'emblée : un intitulé de
+   section, puis ses pages. L'accordéon et le compteur disparaissent.
+   -------------------------------------------------------------------------- */
+.admin-area .admin-nav { display: grid; gap: var(--a-gap-4); margin-top: var(--a-gap-4); }
+.admin-nav-section { display: grid; gap: 2px; }
+.admin-nav-label {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  margin: 0 0 .25rem;
+  padding-inline: .6rem;
+  color: var(--a-text-3) !important;
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+}
+.admin-nav-label .admin-nav-icon { width: .85rem; height: .85rem; color: var(--a-text-3); }
+.admin-nav-section > a {
+  display: flex;
+  align-items: center;
+  min-height: 2.1rem;
+  padding: .35rem .6rem;
+  border: 1px solid transparent;
+  border-radius: var(--a-radius-sm);
+  color: var(--a-text-2) !important;
+  font-size: .845rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+.admin-nav-section > a:hover { background: var(--a-surface-2); color: var(--a-text) !important; }
+.admin-nav-section > a[aria-current="page"] {
+  background: var(--a-accent-soft) !important;
+  color: var(--a-accent) !important;
+  font-weight: 700;
+}
+/* L'accordéon n'est plus utilisé : on neutralise ses styles résiduels. */
+.admin-nav-group, .admin-nav-count, .admin-nav-links { display: none !important; }
+
+/* Case « Se souvenir de moi » : ligne simple, alignée sur les champs. */
+.auth-remember {
+  display: flex !important;
+  align-items: center;
+  gap: .55rem;
+  font-size: .8125rem !important;
+  font-weight: 550 !important;
+  color: var(--a-text-2) !important;
+  cursor: pointer;
+}
+.auth-remember input[type=checkbox] {
+  width: 1.05rem !important;
+  height: 1.05rem !important;
+  min-width: 0 !important;
+  margin: 0;
+  accent-color: var(--a-accent);
+  cursor: pointer;
+}
+
+/* --------------------------------------------------------------------------
+   13. Éditeur de chapitre : rembourrage et réorganisation
+   --------------------------------------------------------------------------
+   Les deux panneaux n'avaient aucun rembourrage interne : le titre et la jauge
+   étaient collés au bord de la carte, et les champs se suivaient sans rythme.
+   On rétablit une marge interne, puis on regroupe visuellement :
+     • colonne gauche : titre, puis formulaire aéré ;
+     • colonne droite : état du chapitre en tête, alertes, puis contenus.
+   -------------------------------------------------------------------------- */
+.chapter-workspace .workspace-editor,
+.chapter-workspace .workspace-list {
+  padding: clamp(1.25rem, 1rem + 1vw, 1.75rem) !important;
+  border-radius: var(--a-radius) !important;
+  border: 1px solid var(--a-border) !important;
+  background: var(--a-surface) !important;
+  box-shadow: var(--a-shadow) !important;
+}
+
+/* Titre de panneau : séparé du contenu. */
+.chapter-workspace .workspace-editor > h2,
+.chapter-workspace .workspace-list > h2 {
+  margin: 0 0 var(--a-gap-5) !important;
+  padding-bottom: var(--a-gap-3);
+  border-bottom: 1px solid var(--a-border);
+  font-size: 1.05rem !important;
+  font-weight: 700 !important;
+  letter-spacing: -.01em;
+}
+
+/* Formulaire : 8 px entre un libellé et son champ, 20 px entre deux champs. */
+.chapter-workspace .workspace-form { gap: var(--a-gap-5) !important; }
+.chapter-workspace .workspace-field {
+  gap: .4rem !important;
+  font-size: .8125rem !important;
+  font-weight: 600 !important;
+  color: var(--a-text-2) !important;
+}
+.chapter-workspace .workspace-field input,
+.chapter-workspace .workspace-field select { width: 100%; }
+.chapter-workspace .workspace-checkbox {
+  margin-top: var(--a-gap-1);
+  color: var(--a-text) !important;
+  font-size: .875rem !important;
+}
+.chapter-workspace .workspace-checkbox input { accent-color: var(--a-accent); }
+.chapter-workspace .workspace-actions {
+  margin-top: var(--a-gap-2);
+  padding-top: var(--a-gap-4);
+  border-top: 1px solid var(--a-border);
+  gap: var(--a-gap-3);
+}
+.chapter-workspace .workspace-actions .btn-primary {
+  background: var(--a-primary) !important;
+  border-color: var(--a-primary) !important;
+  color: #ffffff !important;
+}
+html.dark .chapter-workspace .workspace-actions .btn-primary { color: #14161a !important; }
+
+/* Éditeur de texte : barre d'outils et zone forment un seul bloc. */
+.chapter-workspace .pedagogical-editor {
+  display: grid;
+  border: 1px solid var(--a-border-strong);
+  border-radius: var(--a-radius-sm);
+  overflow: hidden;
+  background: var(--a-surface);
+}
+.chapter-workspace .editor-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .3rem;
+  padding: .5rem;
+  border-bottom: 1px solid var(--a-border);
+  background: var(--a-surface-2);
+  overflow: visible;
+}
+.chapter-workspace .editor-toolbar button {
+  height: 1.9rem;
+  padding-inline: .6rem;
+  border: 1px solid var(--a-border-strong);
+  border-radius: var(--a-radius-sm);
+  background: var(--a-surface);
+  color: var(--a-text-2);
+  font-size: .78rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.chapter-workspace .editor-toolbar button:hover {
+  border-color: var(--a-text-3);
+  background: var(--a-surface-3);
+  color: var(--a-text);
+}
+.chapter-workspace .pedagogical-editor textarea {
+  border: 0 !important;
+  border-radius: 0 !important;
+  min-height: 12rem;
+}
+.chapter-workspace .pedagogical-editor textarea:focus-visible { box-shadow: none !important; }
+
+/* Colonne droite : état du chapitre en tête, aligné et sans rognage. */
+.chapter-workspace .workspace-health {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: var(--a-gap-4);
+  margin: 0 0 var(--a-gap-4);
+  padding-bottom: var(--a-gap-4);
+  border-bottom: 1px solid var(--a-border);
+}
+.chapter-workspace .workspace-health h2 {
+  margin: 0 !important;
+  font-size: 1.05rem !important;
+  font-weight: 700 !important;
+}
+.chapter-workspace .workspace-health p {
+  margin: .15rem 0 0 !important;
+  color: var(--a-text-2) !important;
+  font-size: .875rem !important;
+}
+.chapter-workspace .completion-ring {
+  width: 4.5rem !important;
+  height: 4.5rem !important;
+  flex: none;
+}
+.chapter-workspace .completion-ring strong { font-size: 1.15rem !important; }
+.chapter-workspace .completion-ring span { font-size: .6rem !important; }
+
+/* Critères : pastilles lisibles, groupées. */
+.chapter-workspace .workspace-checks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  margin-bottom: var(--a-gap-4);
+}
+.chapter-workspace .workspace-checks span {
+  padding: .3rem .6rem;
+  border: 1px solid var(--a-border);
+  border-radius: var(--a-radius-pill);
+  background: var(--a-surface-2);
+  color: var(--a-text-2);
+  font-size: .78rem;
+  font-weight: 600;
+}
+.chapter-workspace .workspace-checks span.is-complete {
+  border-color: color-mix(in srgb, var(--a-accent) 35%, var(--a-border));
+  background: var(--a-accent-soft);
+  color: var(--a-accent);
+}
+
+/* Alertes : encadré net, plus de bloc ambre collé au bord. */
+.chapter-workspace .workspace-alerts {
+  margin-bottom: var(--a-gap-4);
+  padding: .75rem 1rem;
+  border: 1px solid color-mix(in srgb, #f59e0b 35%, var(--a-border));
+  border-radius: var(--a-radius-sm);
+  background: color-mix(in srgb, #f59e0b 8%, var(--a-surface));
+}
+.chapter-workspace .workspace-alerts summary {
+  cursor: pointer;
+  color: var(--a-text);
+  font-size: .85rem;
+  font-weight: 700;
+}
+.chapter-workspace .workspace-alerts ul {
+  margin: .6rem 0 0;
+  padding-left: 1.1rem;
+  color: var(--a-text-2);
+  font-size: .84rem;
+  line-height: 1.6;
+}
+
+/* Contenus du chapitre : lignes aérées, filets propres. */
+.chapter-workspace .workspace-list > h2.mt-6 { margin-top: var(--a-gap-5) !important; }
+.chapter-workspace .workspace-overview-row {
+  padding: .8rem .25rem !important;
+  border-bottom: 1px solid var(--a-border) !important;
+  font-size: .875rem !important;
+  color: var(--a-text) !important;
+}
+.chapter-workspace .workspace-overview-row:last-of-type { border-bottom: 0 !important; }
+.chapter-workspace .workspace-overview-row:hover { background: var(--a-surface-2) !important; }
+.chapter-workspace .workspace-overview-row > span { color: var(--a-text-2) !important; }
+
+/* Onglets du chapitre : un peu d'air avant les panneaux. */
+.chapter-workspace .workspace-tabs { margin-bottom: var(--a-gap-2); }
+
+@media (min-width: 1000px) {
+  /* L'état du chapitre suit la lecture quand le formulaire est long. */
+  .chapter-workspace .workspace-list { align-self: start; position: sticky; top: 1rem; }
+}
+
+/* --------------------------------------------------------------------------
+   14. Flashcards / QCM : rendre visible la série en cours de modification
+   --------------------------------------------------------------------------
+   Le bloc des cartes se trouve en bas de page et n'apparaît qu'après avoir
+   choisi une série : sans repère, on ne sait pas où ajouter ni modifier une
+   carte. Un bandeau nomme la série et mène directement au bloc.
+   -------------------------------------------------------------------------- */
+.workspace-selected {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .6rem;
+  margin-bottom: var(--a-gap-4);
+  padding: .75rem 1rem;
+  border: 1px solid color-mix(in srgb, var(--a-accent) 30%, var(--a-border));
+  border-left: 3px solid var(--a-accent);
+  border-radius: var(--a-radius-sm);
+  background: var(--a-accent-soft);
+}
+.workspace-selected-badge {
+  padding: .18rem .5rem;
+  border-radius: var(--a-radius-pill);
+  background: var(--a-surface);
+  color: var(--a-accent);
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+.workspace-selected strong { font-size: .95rem; color: var(--a-text); }
+.workspace-selected .muted { font-size: .8rem; color: var(--a-text-2) !important; }
+.workspace-selected-actions {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  margin-left: auto;
+}
+.workspace-selected-actions .btn-primary,
+.workspace-selected-actions .btn-secondary { height: 2.2rem; padding-inline: .8rem; font-size: .8rem !important; }
+
+.workspace-hint {
+  margin: 0 0 var(--a-gap-4);
+  padding: .7rem .9rem;
+  border: 1px dashed var(--a-border-strong);
+  border-radius: var(--a-radius-sm);
+  background: var(--a-surface-2);
+  color: var(--a-text-2);
+  font-size: .85rem;
+}
+
+/* Mention « visible sur le site » à côté de la case Publié. */
+.workspace-checkbox-hint { color: var(--a-text-3); font-size: .78rem; font-weight: 500; }
+
+/* --------------------------------------------------------------------------
+   15. Publication évidente : le statut et l'action se voient d'un coup d'œil
+   --------------------------------------------------------------------------
+   Pour un enseignant, la question « est-ce visible par mes élèves ? » est la
+   plus importante. On la rend impossible à manquer.
+   -------------------------------------------------------------------------- */
+.chapter-publish {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .5rem;
+  margin-top: .6rem;
+}
+.chapter-publish .status-pill {
+  margin: 0;
+  padding: .3rem .7rem;
+  font-size: .78rem;
+  font-weight: 800;
+  letter-spacing: .03em;
+  text-transform: uppercase;
+  border-radius: var(--a-radius-pill);
+}
+.chapter-publish .status-pill.is-live {
+  background: color-mix(in srgb, #16a34a 14%, var(--a-surface));
+  border: 1px solid color-mix(in srgb, #16a34a 55%, var(--a-border));
+  color: #166534;
+}
+.chapter-publish .status-pill.is-draft {
+  background: color-mix(in srgb, #f59e0b 14%, var(--a-surface));
+  border: 1px solid color-mix(in srgb, #f59e0b 55%, var(--a-border));
+  color: #b45309;
+}
+html.dark .chapter-publish .status-pill.is-live { color: #86efac; }
+html.dark .chapter-publish .status-pill.is-draft { color: #fcd34d; }
+.chapter-publish-btn {
+  height: 2.1rem;
+  padding-inline: .85rem;
+  border-radius: var(--a-radius-sm);
+  border: 1px solid var(--a-border-strong);
+  background: var(--a-surface);
+  color: var(--a-text);
+  font-size: .8rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.chapter-publish-btn:hover { background: var(--a-surface-2); }
+.chapter-view-link {
+  color: var(--a-accent);
+  font-size: .8rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+.chapter-view-link:hover { text-decoration: underline; }
+
+/* Bouton Publier / Masquer sur chaque contenu. */
+.btn-publish {
+  height: 2.1rem;
+  padding-inline: .85rem;
+  border-radius: var(--a-radius-sm);
+  font-size: .8rem;
+  font-weight: 750;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+.btn-publish.is-publish {
+  background: color-mix(in srgb, #16a34a 12%, var(--a-surface));
+  border-color: color-mix(in srgb, #16a34a 45%, var(--a-border));
+  color: #14532d;
+}
+.btn-publish.is-publish:hover { background: color-mix(in srgb, #16a34a 20%, var(--a-surface)); }
+html.dark .btn-publish.is-publish { color: #86efac; }
+.btn-publish.is-hide {
+  background: var(--a-surface-2);
+  border-color: var(--a-border-strong);
+  color: var(--a-text-2);
+}
+.btn-publish.is-hide:hover { background: var(--a-surface-3); color: var(--a-text); }
+
+/* Statut des contenus : plus visible dans la liste. */
+.workspace-resource .status-pill {
+  padding: .22rem .6rem;
+  font-size: .72rem;
+  font-weight: 800;
+  letter-spacing: .03em;
+  text-transform: uppercase;
+}
+.workspace-resource .status-pill.is-live { color: #166534; border-color: color-mix(in srgb, #16a34a 45%, var(--a-border)); background: color-mix(in srgb, #16a34a 12%, var(--a-surface)); }
+.workspace-resource .status-pill.is-draft { color: #b45309; border-color: color-mix(in srgb, #f59e0b 45%, var(--a-border)); background: color-mix(in srgb, #f59e0b 12%, var(--a-surface)); }
+html.dark .workspace-resource .status-pill.is-live { color: #86efac; }
+html.dark .workspace-resource .status-pill.is-draft { color: #fcd34d; }
+
+/* Titre du formulaire : on sait immédiatement si on ajoute ou si on modifie. */
+.workspace-form-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .5rem;
+}
+.workspace-form-badge {
+  padding: .2rem .6rem;
+  border-radius: var(--a-radius-pill);
+  font-size: .68rem;
+  font-weight: 800;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+.workspace-form-badge.is-add { background: color-mix(in srgb, #16a34a 14%, var(--a-surface)); color: #14532d; border: 1px solid color-mix(in srgb, #16a34a 45%, var(--a-border)); }
+.workspace-form-badge.is-edit { background: var(--a-accent-soft); color: var(--a-accent); border: 1px solid color-mix(in srgb, var(--a-accent) 40%, var(--a-border)); }
+html.dark .workspace-form-badge.is-add { color: #86efac; }
+.workspace-form-subject { color: var(--a-text-2); font-size: .9rem; font-weight: 600; }
+
+/* --------------------------------------------------------------------------
+   16. Vue unifiée « Cours » : rail de niveaux
+   --------------------------------------------------------------------------
+   Un enseignant pense « niveau → chapitres ». Le rail remplace le filtre par
+   sélection : choisir un niveau est un geste direct, avec compteur et couleur.
+   -------------------------------------------------------------------------- */
+.cours-levels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .45rem;
+  align-items: center;
+}
+.cours-level {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  min-height: 2.4rem;
+  padding: .4rem .85rem;
+  border: 1px solid var(--a-border-strong);
+  border-radius: var(--a-radius-pill);
+  background: var(--a-surface);
+  color: var(--a-text) !important;
+  font-size: .86rem;
+  font-weight: 650;
+  text-decoration: none;
+  box-shadow: var(--a-shadow);
+}
+.cours-level:hover { background: var(--a-surface-2); }
+.cours-level.is-active {
+  border-color: color-mix(in srgb, var(--niveau-accent, var(--a-accent)) 55%, var(--a-border));
+  background: color-mix(in srgb, var(--niveau-accent, var(--a-accent)) 12%, var(--a-surface));
+  color: var(--a-text) !important;
+  font-weight: 750;
+}
+.cours-level-dot {
+  width: .6rem;
+  height: .6rem;
+  border-radius: 999px;
+  background: var(--niveau-accent, var(--a-accent));
+}
+.cours-level-count {
+  color: var(--a-text-3);
+  font-size: .76rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.cours-level.is-active .cours-level-count { color: var(--a-text-2); }
+.cours-level-add {
+  min-height: 2.4rem;
+  padding: .4rem .85rem;
+  border: 1px dashed var(--a-border-strong);
+  border-radius: var(--a-radius-pill);
+  background: none;
+  color: var(--a-text-2);
+  font-size: .82rem;
+  font-weight: 650;
+  text-decoration: none;
+}
+.cours-level-add:hover { border-color: var(--a-accent); color: var(--a-accent); }
+
+/* Carte de chapitre en brouillon : bordure discrètement ambrée. */
+.chapter-tile.is-draft { border-color: color-mix(in srgb, #f59e0b 40%, var(--a-border)); }
+.chapter-tile .status-pill {
+  display: inline-flex;
+  margin-bottom: .4rem;
+  padding: .2rem .6rem;
+  font-size: .68rem;
+  font-weight: 800;
+  letter-spacing: .03em;
+  text-transform: uppercase;
+}
+.chapter-tile .status-pill.is-live { color: #166534; background: color-mix(in srgb, #16a34a 12%, var(--a-surface)); border: 1px solid color-mix(in srgb, #16a34a 45%, var(--a-border)); }
+.chapter-tile .status-pill.is-draft { color: #92400e; background: color-mix(in srgb, #f59e0b 12%, var(--a-surface)); border: 1px solid color-mix(in srgb, #f59e0b 45%, var(--a-border)); }
+html.dark .chapter-tile .status-pill.is-live { color: #86efac; }
+html.dark .chapter-tile .status-pill.is-draft { color: #fcd34d; }
+.chapter-tile .chapter-actions .btn-publish { font-size: .76rem; }
+
+/* --------------------------------------------------------------------------
+   17. Messages de confirmation : un vrai toast, pas un panneau plein écran
+   --------------------------------------------------------------------------
+   Deux couches fixaient des bords différents (`top` côté historique, `bottom`
+   côté refonte) : un élément fixe avec `top` ET `bottom` s'étire sur toute la
+   hauteur. On repart d'un seul coin, en bas à droite.
+   -------------------------------------------------------------------------- */
+.admin-area .admin-toast {
+  position: fixed !important;
+  top: auto !important;
+  left: auto !important;
+  right: var(--a-gap-5) !important;
+  bottom: var(--a-gap-5) !important;
+  z-index: 900 !important;
+  display: flex !important;
+  align-items: center;
+  gap: var(--a-gap-3);
+  width: auto;
+  height: auto !important;
+  max-width: min(26rem, calc(100vw - 2rem));
+  max-height: min(40vh, 10rem);
+  overflow: auto;
+  padding: .85rem 1rem;
+  border: 1px solid var(--a-border) !important;
+  border-left: 4px solid var(--a-border-strong) !important;
+  border-radius: var(--a-radius-sm) !important;
+  background: var(--a-surface) !important;
+  color: var(--a-text) !important;
+  box-shadow: var(--a-shadow-hover) !important;
+  font-size: .875rem;
+  animation: none !important;
+}
+.admin-area .admin-toast.is-success {
+  border-color: color-mix(in srgb, #16a34a 40%, var(--a-border)) !important;
+  border-left-color: #16a34a !important;
+  background: color-mix(in srgb, #16a34a 7%, var(--a-surface)) !important;
+  color: var(--a-text) !important;
+}
+.admin-area .admin-toast.is-error {
+  border-color: color-mix(in srgb, #dc2626 40%, var(--a-border)) !important;
+  border-left-color: #dc2626 !important;
+  background: color-mix(in srgb, #dc2626 7%, var(--a-surface)) !important;
+  color: var(--a-text) !important;
+}
+.admin-area .admin-toast strong {
+  display: block;
+  font-size: .82rem;
+  font-weight: 800;
+  letter-spacing: .02em;
+  text-transform: uppercase;
+}
+.admin-area .admin-toast.is-success strong { color: #14532d; }
+.admin-area .admin-toast.is-error strong { color: #991b1b; }
+html.dark .admin-area .admin-toast.is-success strong { color: #86efac; }
+html.dark .admin-area .admin-toast.is-error strong { color: #fca5a5; }
+.admin-area .admin-toast span { color: var(--a-text-2) !important; font-size: .875rem; }
+.admin-area .admin-toast button {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.9rem;
+  height: 1.9rem;
+  margin-left: auto !important;
+  padding: 0;
+  border: 1px solid var(--a-border-strong) !important;
+  border-radius: var(--a-radius-sm);
+  background: var(--a-surface) !important;
+  color: var(--a-text-2) !important;
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.admin-area .admin-toast button:hover { background: var(--a-surface-3) !important; color: var(--a-text) !important; }
+
+@media (max-width: 620px) {
+  .admin-area .admin-toast { right: var(--a-gap-3) !important; bottom: var(--a-gap-3) !important; left: var(--a-gap-3) !important; max-width: none; }
+}
+
+/* --------------------------------------------------------------------------
+   18. Trafic du site : période, histogramme, pays
+   -------------------------------------------------------------------------- */
+.trafic-periodes { display: flex; flex-wrap: wrap; gap: .4rem; }
+.trafic-periode {
+  padding: .4rem .85rem;
+  border: 1px solid var(--a-border-strong);
+  border-radius: var(--a-radius-pill);
+  background: var(--a-surface);
+  color: var(--a-text-2) !important;
+  font-size: .82rem;
+  font-weight: 650;
+  text-decoration: none;
+}
+.trafic-periode:hover { background: var(--a-surface-2); color: var(--a-text) !important; }
+.trafic-periode.is-active {
+  border-color: var(--a-primary);
+  background: var(--a-primary);
+  color: #fff !important;
+}
+html.dark .trafic-periode.is-active { color: #14161a !important; }
+
+.trafic-bloc { padding: var(--a-gap-5) !important; }
+.trafic-bloc .section-title { margin: 0 0 var(--a-gap-4) !important; }
+
+.trafic-chart {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  align-items: end;
+  gap: .35rem;
+  height: 9rem;
+  padding-top: .5rem;
+}
+.trafic-col { display: flex; flex-direction: column; justify-content: flex-end; align-items: center; height: 100%; gap: .3rem; min-width: 0; }
+.trafic-bar {
+  display: block;
+  width: 100%;
+  max-width: 2.2rem;
+  border-radius: 4px 4px 0 0;
+  background: var(--a-accent);
+  min-height: 2px;
+}
+.trafic-jour {
+  color: var(--a-text-3);
+  font-size: .64rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.trafic-colonnes { display: grid; gap: var(--a-gap-5); grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 1000px) { .trafic-colonnes { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+.trafic-table { width: 100%; border-collapse: collapse; font-size: .875rem; }
+.trafic-table th {
+  padding: .45rem .6rem;
+  border-bottom: 1px solid var(--a-border);
+  color: var(--a-text-3);
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  text-align: left;
+}
+.trafic-table td { padding: .55rem .6rem; border-bottom: 1px solid var(--a-border); color: var(--a-text); }
+.trafic-table tr:last-child td { border-bottom: 0; }
+.trafic-num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.trafic-drapeau { font-size: 1.05rem; }
+.trafic-page { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .8rem; color: var(--a-text-2); word-break: break-all; }
+.trafic-part {
+  display: inline-block;
+  width: 3.5rem;
+  height: .35rem;
+  margin-right: .4rem;
+  border-radius: 999px;
+  background: var(--a-surface-3);
+  overflow: hidden;
+  vertical-align: middle;
+}
+.trafic-part span { display: block; height: 100%; background: var(--a-accent); border-radius: inherit; }
+.trafic-note { margin-top: var(--a-gap-5); font-size: .78rem; line-height: 1.6; max-width: 70ch; }
+
+/* --------------------------------------------------------------------------
+   19. Listes de cartes et de questions : alignées à gauche, sans débordement
+   --------------------------------------------------------------------------
+   Signalé : texte étiré et débordant hors de la carte. On verrouille la mise en
+   page : alignement à gauche, retour à la ligne forcé, et formules mathématiques
+   contenues dans la carte (défilement horizontal au lieu de débordement).
+   -------------------------------------------------------------------------- */
+.workspace-child-list {
+  display: grid;
+  gap: var(--a-gap-4);
+  text-align: left;
+  justify-items: stretch;
+  /* Sans cela, la grille étire ses lignes sur la hauteur du formulaire voisin :
+     chaque carte occupait la hauteur de la colonne (332 px pour 150 px de texte). */
+  align-content: start;
+}
+.workspace-child-list .workspace-resource {
+  padding: var(--a-gap-4) !important;
+  border: 1px solid var(--a-border) !important;
+  border-radius: var(--a-radius) !important;
+  background: var(--a-surface) !important;
+  text-align: left;
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+.workspace-child-list .workspace-resource > div:first-of-type { min-width: 0; }
+.workspace-child-list .content-line,
+.workspace-child-list .content-callout {
+  display: block;
+  max-width: 100%;
+  white-space: normal !important;
+  text-align: left;
+  border-radius: var(--a-radius-sm);
+}
+.workspace-child-list .content-callout {
+  padding: .7rem .9rem;
+  border-left: 3px solid var(--a-accent);
+  background: var(--a-accent-soft);
+  color: var(--a-text);
+}
+.workspace-child-list .katex,
+.workspace-child-list .katex-display {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+.workspace-child-list .workspace-answer { text-align: left; }
+.workspace-child-list details summary { cursor: pointer; color: var(--a-text-2); font-size: .82rem; font-weight: 650; }
+.workspace-child-list .workspace-actions { justify-content: flex-start; margin-top: var(--a-gap-3); }
+
+/* --------------------------------------------------------------------------
+   20. Champ image des cartes et des questions
+   -------------------------------------------------------------------------- */
+.ws-image-field {
+  display: grid;
+  gap: var(--a-gap-3);
+  margin: 0;
+  padding: var(--a-gap-4);
+  border: 1px dashed var(--a-border-strong);
+  border-radius: var(--a-radius-sm);
+  background: var(--a-surface-2);
+}
+.ws-image-field legend {
+  padding: 0 .4rem;
+  color: var(--a-text-2);
+  font-size: .78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+.ws-image-current { display: grid; gap: .5rem; justify-items: start; }
+.ws-image-current img {
+  border: 1px solid var(--a-border);
+  border-radius: var(--a-radius-sm);
+  background: var(--a-surface);
+  height: auto;
+}
+.ws-image-remove { display: flex; align-items: center; gap: .45rem; font-size: .8rem; color: var(--a-text-2); }
+.ws-image-field label { font-size: .8rem !important; }
+.ws-image-hint { margin: 0; color: var(--a-text-3); font-size: .74rem; line-height: 1.5; }
+/* Aperçu de l'image dans la liste des cartes. */
+.workspace-child-list .child-image {
+  display: block;
+  margin: .5rem 0 .7rem;
+  border: 1px solid var(--a-border);
+  border-radius: var(--a-radius-sm);
+  height: auto;
+}
+
+/* --------------------------------------------------------------------------
+   21. Formulaire de question QCM : une colonne claire
+   --------------------------------------------------------------------------
+   Les champs étaient posés dans une grille à plusieurs colonnes : l'image se
+   retrouvait coincée dans une colonne étroite, et les six zones de réponse
+   s'étiraient sur toute la largeur.
+   -------------------------------------------------------------------------- */
+.ws-form { display: grid; gap: var(--a-gap-4); margin-top: var(--a-gap-4); }
+.ws-form-field {
+  display: grid;
+  gap: .35rem;
+  font-size: .8125rem !important;
+  font-weight: 600 !important;
+  color: var(--a-text-2) !important;
+}
+.ws-form-field textarea,
+.ws-form-field input,
+.ws-form-field select { width: 100%; }
+.ws-form-field textarea { min-height: 4.5rem; }
+
+.ws-form-duo {
+  display: grid;
+  gap: var(--a-gap-3);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  align-items: start;
+}
+
+.ws-answers {
+  display: grid;
+  gap: var(--a-gap-3);
+  margin: 0;
+  padding: var(--a-gap-4);
+  border: 1px solid var(--a-border);
+  border-radius: var(--a-radius-sm);
+  background: var(--a-surface-2);
+}
+.ws-answers legend {
+  padding: 0 .4rem;
+  font-size: .78rem;
+  font-weight: 700;
+  color: var(--a-text-2);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+.ws-answers-hint { font-weight: 500; text-transform: none; letter-spacing: 0; color: var(--a-text-3); }
+.ws-answers-extra {
+  border: 1px dashed var(--a-border-strong);
+  border-radius: var(--a-radius-sm);
+  padding: var(--a-gap-3);
+  background: var(--a-surface);
+}
+.ws-answers-extra summary {
+  cursor: pointer;
+  font-size: .82rem;
+  font-weight: 650;
+  color: var(--a-text-2);
+}
+.ws-answers-extra[open] summary { margin-bottom: var(--a-gap-3); }
+
+/* --------------------------------------------------------------------------
+   22. Cartes de l'administration : compactes et lisibles
+   --------------------------------------------------------------------------
+   Chaque élément affichait « Ordre N », le texte, un bloc « Verso » replié et
+   deux boutons empilés : la ligne était haute et peu lisible. On passe à une
+   vraie carte : numéro, contenu, verso replié, actions alignées à droite.
+   -------------------------------------------------------------------------- */
+.workspace-child-list { display: grid; gap: var(--a-gap-3); align-content: start; text-align: left; }
+
+.admin-card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--a-gap-4);
+  padding: var(--a-gap-4);
+  border: 1px solid var(--a-border);
+  border-radius: var(--a-radius);
+  background: var(--a-surface);
+  box-shadow: var(--a-shadow);
+}
+.admin-card:hover { border-color: var(--a-border-strong); }
+
+.admin-card-main { display: flex; gap: var(--a-gap-3); flex: 1 1 20rem; min-width: 0; }
+.admin-card-num {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.9rem;
+  height: 1.9rem;
+  border-radius: 999px;
+  background: var(--a-surface-3);
+  color: var(--a-text-2);
+  font-size: .78rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.admin-card-body { min-width: 0; flex: 1; display: grid; gap: .35rem; }
+.admin-card-front {
+  color: var(--a-text);
+  font-size: .92rem;
+  font-weight: 600;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+.admin-card-front .content-line { display: block; margin: 0; }
+.admin-card-front .content-line + .content-line { margin-top: .25rem; }
+
+.admin-card-thumb {
+  display: block;
+  height: auto;
+  max-width: 100%;
+  max-height: 9rem;
+  object-fit: contain;
+  border: 1px solid var(--a-border);
+  border-radius: var(--a-radius-sm);
+  background: var(--a-surface-2);
+}
+
+.admin-card-back { margin-top: .15rem; }
+.admin-card-back summary {
+  cursor: pointer;
+  color: var(--a-text-3);
+  font-size: .78rem;
+  font-weight: 650;
+  list-style: none;
+}
+.admin-card-back summary::-webkit-details-marker { display: none; }
+.admin-card-back summary::before { content: "▸ "; }
+.admin-card-back[open] summary::before { content: "▾ "; }
+.admin-card-back summary:hover { color: var(--a-accent); }
+.admin-card-back .workspace-answer {
+  margin-top: .5rem;
+  padding: .7rem .85rem;
+  border-left: 3px solid var(--a-border-strong);
+  border-radius: 0 var(--a-radius-sm) var(--a-radius-sm) 0;
+  background: var(--a-surface-2);
+  color: var(--a-text-2);
+  font-size: .86rem;
+  line-height: 1.5;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+.admin-card-back .workspace-answer p { margin: 0 0 .3rem; }
+.admin-card-back .workspace-correct {
+  border-left-color: #16a34a;
+  background: color-mix(in srgb, #16a34a 9%, var(--a-surface));
+  color: var(--a-text);
+  padding-left: .6rem;
+}
+
+.admin-card-actions { display: flex; flex-wrap: wrap; gap: .4rem; align-items: center; margin-left: auto; }
+.admin-card-actions .btn-secondary,
+.admin-card-actions .btn-delete {
+  height: 2.05rem;
+  padding-inline: .75rem;
+  border-radius: var(--a-radius-sm);
+  font-size: .78rem;
+  font-weight: 650;
+  cursor: pointer;
+}
+.admin-card-actions .btn-delete {
+  border: 1px solid color-mix(in srgb, #dc2626 40%, var(--a-border));
+  background: var(--a-surface);
+  color: #991b1b;
+}
+.admin-card-actions .btn-delete:hover { background: color-mix(in srgb, #dc2626 10%, var(--a-surface)); }
+html.dark .admin-card-actions .btn-delete { color: #fca5a5; }
+
+@media (max-width: 720px) {
+  .admin-card-actions { margin-left: 0; width: 100%; }
+  .admin-card-actions .btn-secondary, .admin-card-actions .btn-delete { flex: 1; }
+}

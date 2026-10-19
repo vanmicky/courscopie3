@@ -1,0 +1,281 @@
+/* ==========================================================================
+   V76 — Refonte « moderne et attractive »
+   --------------------------------------------------------------------------
+   Couche ajoutée APRÈS ds-1/ds-2/ds-3 : elle modernise le langage visuel
+   sans toucher aux jetons existants (surfaces plus profondes, signature
+   dégradée indigo→violet, héros plus affirmés, cartes et boutons plus
+   vivants). Tout reste piloté par le design system : une seule couche,
+   cohérente sur le site élève et l'administration.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Jetons complémentaires
+   -------------------------------------------------------------------------- */
+:root {
+  --ds-grad-brand: linear-gradient(135deg, #6366f1 0%, #4f46e5 46%, #6d28d9 100%);
+  --ds-grad-brand-soft: linear-gradient(135deg, #eef2ff 0%, #f5f3ff 100%);
+  --ds-shadow-card: 0 1px 2px rgba(16, 24, 40, .05), 0 4px 14px rgba(16, 24, 40, .06);
+  --ds-shadow-hover: 0 2px 6px rgba(16, 24, 40, .06), 0 14px 34px rgba(16, 24, 40, .12);
+  --ds-radius-lg: 18px;
+  --ds-radius-xl: 24px;
+}
+
+html.dark {
+  --ds-grad-brand: linear-gradient(135deg, #818cf8 0%, #6d5bd0 46%, #8b5cf6 100%);
+  --ds-grad-brand-soft: linear-gradient(135deg, #1e2244 0%, #2a2350 100%);
+  --ds-shadow-card: 0 1px 2px rgba(0, 0, 0, .3), 0 6px 16px rgba(0, 0, 0, .28);
+  --ds-shadow-hover: 0 4px 12px rgba(0, 0, 0, .35), 0 18px 40px rgba(0, 0, 0, .4);
+}
+
+/* La couche historique force 8px sur les pages élèves via --student-radius :
+   on le relève ici pour des surfaces plus douces, puis on affine les héros. */
+.student-page { --student-radius: 14px; }
+.student-page .work-global-hero,
+.student-page .chapter-page-hero,
+.student-page .exam-hero,
+.student-page .method-page-hero { border-radius: var(--ds-radius-xl) !important; }
+
+/* --------------------------------------------------------------------------
+   2. Atmosphère de la page
+   -------------------------------------------------------------------------- */
+body {
+  background:
+    radial-gradient(1200px 480px at 18% -120px, color-mix(in srgb, var(--ds-brand) 11%, transparent), transparent 70%),
+    radial-gradient(1000px 420px at 88% -160px, color-mix(in srgb, #22d3ee 7%, transparent), transparent 65%),
+    var(--ds-bg) !important;
+}
+html.dark body {
+  background:
+    radial-gradient(1200px 520px at 18% -140px, color-mix(in srgb, var(--ds-brand) 16%, transparent), transparent 70%),
+    radial-gradient(1000px 440px at 88% -160px, color-mix(in srgb, #22d3ee 9%, transparent), transparent 65%),
+    var(--ds-bg) !important;
+}
+
+/* --------------------------------------------------------------------------
+   3. En-tête : verre dépoli premium
+   -------------------------------------------------------------------------- */
+.site-header {
+  min-height: var(--ds-header-h);
+  background: color-mix(in srgb, var(--ds-surface) 82%, transparent) !important;
+  box-shadow: 0 1px 0 var(--ds-border), 0 10px 30px -18px rgba(16, 24, 40, .25) !important;
+  backdrop-filter: saturate(1.6) blur(18px);
+}
+html.dark .site-header { background: color-mix(in srgb, var(--ds-bg) 80%, transparent) !important; }
+
+.logo-mark,
+.admin-brand span {
+  background: var(--ds-grad-brand) !important;
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--ds-brand) 40%, transparent) !important;
+  color: #fff !important;
+}
+.site-brand-copy strong { font-weight: 850; letter-spacing: -.02em; }
+
+.nav-link {
+  border-radius: var(--ds-radius-pill) !important;
+}
+.nav-link:hover { background: var(--ds-surface-2) !important; color: var(--ds-text) !important; border-color: var(--ds-border) !important; }
+.nav-link[aria-current="page"],
+.nav-link[aria-current="true"] {
+  background: var(--ds-grad-brand-soft) !important;
+  color: var(--ds-brand-ink) !important;
+  border-color: color-mix(in srgb, var(--ds-brand) 28%, transparent) !important;
+  font-weight: 700;
+}
+.theme-btn { box-shadow: var(--ds-shadow-card) !important; }
+
+/* --------------------------------------------------------------------------
+   4. Boutons
+   -------------------------------------------------------------------------- */
+.btn-primary,
+.btn-secondary,
+.btn-danger {
+  border-radius: 10px !important;
+}
+.btn-primary {
+  border: 1px solid transparent !important;
+  background: var(--ds-grad-brand) !important;
+  color: #fff !important;
+  box-shadow: 0 4px 14px color-mix(in srgb, var(--ds-brand) 34%, transparent), inset 0 1px 0 rgba(255, 255, 255, .22) !important;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, .12);
+}
+.btn-primary:hover { filter: brightness(1.05); transform: translateY(-1px); box-shadow: 0 8px 20px color-mix(in srgb, var(--ds-brand) 38%, transparent), inset 0 1px 0 rgba(255, 255, 255, .22) !important; }
+.btn-primary:active { transform: translateY(0); }
+
+.btn-secondary {
+  border-color: var(--ds-border-strong) !important;
+  background: var(--ds-surface) !important;
+  color: var(--ds-text) !important;
+  box-shadow: var(--ds-shadow-card) !important;
+}
+.btn-secondary:hover { border-color: var(--ds-brand) !important; background: var(--ds-brand-soft) !important; color: var(--ds-brand-ink) !important; transform: translateY(-1px); }
+
+/* --------------------------------------------------------------------------
+   5. Surfaces et cartes
+   -------------------------------------------------------------------------- */
+.card,
+.chapter-tile,
+.exercise-public-card,
+.qcm-question-card,
+.flashcard-study-shell,
+.document-resource-card,
+.chapter-video-card,
+.chapter-activity-card,
+.exercise-prep-card,
+.skill-group,
+.exam-exercise-card,
+.work-card,
+.timer-card,
+.method-card,
+.learn2-card,
+.learn-card,
+.pedago-card,
+.stat-card,
+.system-check,
+.backup-feature-card {
+  border-radius: var(--ds-radius-lg) !important;
+  box-shadow: var(--ds-shadow-card) !important;
+}
+
+.student-page .chapter-tile:hover,
+.student-page a.card:hover,
+.student-page .document-resource-card:hover,
+.student-page .chapter-activity-card:hover,
+.student-page .chapter-video-card:hover,
+.student-page .exam-exercise-card:hover,
+.student-page .work-card:hover,
+a.stat-card:hover {
+  border-color: color-mix(in srgb, var(--accent, var(--ds-brand)) 42%, var(--ds-border)) !important;
+  box-shadow: var(--ds-shadow-hover) !important;
+  transform: translateY(-3px);
+}
+
+/* --------------------------------------------------------------------------
+   6. Héros de page
+   -------------------------------------------------------------------------- */
+.work-global-hero,
+.chapter-page-hero,
+.exam-hero,
+.method-page-hero {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--accent, var(--ds-brand)) 16%, var(--ds-border)) !important;
+  border-radius: var(--ds-radius-xl) !important;
+  background:
+    radial-gradient(560px 280px at 88% -60px, color-mix(in srgb, var(--accent, var(--ds-brand)) 14%, transparent), transparent 70%),
+    linear-gradient(135deg, color-mix(in srgb, var(--accent, var(--ds-brand)) 7%, var(--ds-surface)), var(--ds-surface) 62%) !important;
+  box-shadow: var(--ds-shadow-card) !important;
+}
+html.dark .work-global-hero,
+html.dark .chapter-page-hero,
+html.dark .exam-hero {
+  background:
+    radial-gradient(560px 280px at 88% -60px, color-mix(in srgb, var(--accent, var(--ds-brand)) 20%, transparent), transparent 70%),
+    linear-gradient(135deg, color-mix(in srgb, var(--accent, var(--ds-brand)) 10%, var(--ds-surface)), var(--ds-surface) 65%) !important;
+}
+
+.work-global-hero::after,
+.chapter-page-hero::after {
+  background: var(--ds-grad-brand) !important;
+  width: 5px;
+}
+
+/* Texte en dégradé pour un mot-clé des titres d'accueil. */
+.grad-text {
+  background: var(--ds-grad-brand);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* --------------------------------------------------------------------------
+   7. Cartes de niveau (accueil)
+   -------------------------------------------------------------------------- */
+.editorial-home .level-card {
+  border-radius: var(--ds-radius-xl) !important;
+  box-shadow: var(--ds-shadow-card) !important;
+}
+.editorial-home .level-card .level-image {
+  transition: transform var(--ds-motion) var(--ds-ease);
+}
+.editorial-home .level-card:hover { border-color: color-mix(in srgb, var(--accent) 45%, var(--ds-border)) !important; box-shadow: var(--ds-shadow-hover) !important; }
+.editorial-home .level-card:hover .level-image { transform: scale(1.035); }
+.editorial-level-tag {
+  background: var(--accent-deep) !important;
+  color: #fff !important;
+  border-color: transparent !important;
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--accent) 34%, transparent) !important;
+}
+.editorial-card-link { color: var(--accent-ink) !important; }
+
+/* --------------------------------------------------------------------------
+   8. Étiquettes et pastilles
+   -------------------------------------------------------------------------- */
+.badge,
+.status-pill,
+.chapter-number {
+  box-shadow: var(--ds-shadow-xs);
+}
+.chapter-number,
+.exam-index {
+  background: var(--accent-deep) !important;
+  box-shadow: 0 4px 10px color-mix(in srgb, var(--accent) 30%, transparent) !important;
+}
+
+/* --------------------------------------------------------------------------
+   9. Focus et sélection
+   -------------------------------------------------------------------------- */
+::selection { background: color-mix(in srgb, var(--ds-brand) 85%, transparent); color: #fff; }
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--ds-surface), 0 0 0 5px color-mix(in srgb, var(--ds-brand) 55%, transparent);
+}
+
+/* En sombre, les étiquettes de méthode repassent en texte clair. */
+html.dark .method-tag {
+  border-color: color-mix(in srgb, var(--method-accent, var(--ds-brand)) 42%, var(--ds-border)) !important;
+  background: color-mix(in srgb, var(--method-accent, var(--ds-brand)) 12%, var(--ds-surface)) !important;
+  color: color-mix(in srgb, var(--method-accent, var(--ds-brand)) 45%, #ffffff) !important;
+}
+
+/* Les panneaux de formules des fiches méthodes gardaient un fond clair en sombre. */
+html.dark .method-formula {
+  border-color: color-mix(in srgb, var(--method-accent, var(--ds-brand)) 36%, var(--ds-border)) !important;
+  background: color-mix(in srgb, var(--method-accent, var(--ds-brand)) 10%, var(--ds-surface)) !important;
+  color: var(--ds-text) !important;
+}
+html.dark .method-image-placeholder {
+  border-color: color-mix(in srgb, var(--method-accent, var(--ds-brand)) 40%, var(--ds-border)) !important;
+  background: color-mix(in srgb, var(--method-accent, var(--ds-brand)) 10%, var(--ds-surface)) !important;
+  color: color-mix(in srgb, var(--method-accent, var(--ds-brand)) 45%, #ffffff) !important;
+}
+
+/* --------------------------------------------------------------------------
+   10. Pied de page
+   -------------------------------------------------------------------------- */
+.site-footer {
+  border-top: 1px solid var(--ds-border);
+  background: var(--ds-surface);
+}
+.site-footer::before {
+  content: "";
+  display: block;
+  height: 3px;
+  background: var(--ds-grad-brand);
+  opacity: .5;
+}
+
+/* --------------------------------------------------------------------------
+   11. Mouvement réduit
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .editorial-home .level-card:hover .level-image,
+  .btn-primary:hover,
+  .btn-secondary:hover,
+  .student-page .chapter-tile:hover,
+  .student-page .document-resource-card:hover,
+  .student-page .chapter-activity-card:hover,
+  .student-page .chapter-video-card:hover,
+  .student-page .exam-exercise-card:hover,
+  .student-page .work-card:hover,
+  a.stat-card:hover { transform: none !important; }
+}

@@ -1,0 +1,165 @@
+/* ==========================================================================
+   V88 — Menu mobile : tiroir coulissant
+   --------------------------------------------------------------------------
+   Sur téléphone, la navigation était une bande horizontale défilante : on ne
+   voyait pas tous les liens et c'était exigu. Elle devient un panneau qui
+   glisse depuis le bas (bottom sheet), avec de grandes cibles tactiles.
+
+   Amélioration progressive : la classe `js-nav` est posée sur <html> par
+   theme-init.js avant le rendu. Sans JavaScript, le menu reste une bande
+   horizontale visible (aucune navigation perdue).
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Bouton hamburger et groupe d'actions
+   -------------------------------------------------------------------------- */
+.header-actions {
+  grid-column: 2;
+  grid-row: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-2);
+}
+.menu-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  border: 1px solid var(--ds-border) !important;
+  border-radius: var(--ds-radius-sm) !important;
+  background: var(--ds-surface) !important;
+  color: var(--ds-text) !important;
+  cursor: pointer;
+  box-shadow: var(--ds-shadow-xs);
+}
+.js-nav .menu-toggle { display: inline-flex; }
+.menu-toggle:hover { border-color: var(--ds-border-strong) !important; background: var(--ds-surface-2) !important; }
+.menu-toggle .icon { width: 1.4rem; height: 1.4rem; }
+
+/* --------------------------------------------------------------------------
+   2. Tiroir (bottom sheet)
+   -------------------------------------------------------------------------- */
+.js-nav .mobile-nav {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 240;
+  display: block !important;
+  width: auto;
+  max-height: min(84dvh, 48rem);
+  margin: 0;
+  padding: var(--ds-space-3) var(--ds-space-4) calc(var(--ds-space-4) + env(safe-area-inset-bottom, 0px));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--ds-surface);
+  border-top: 1px solid var(--ds-border);
+  border-radius: 22px 22px 0 0;
+  box-shadow: 0 -18px 50px rgba(15, 23, 42, .22);
+  transform: translateY(112%);
+  transition: transform var(--ds-motion) var(--ds-ease);
+}
+.js-nav .mobile-nav.is-open { transform: translateY(0); }
+
+/* En-tête du tiroir */
+.mobile-menu-head { display: none; }
+.js-nav .mobile-menu-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: .25rem .5rem .6rem;
+  margin-bottom: .25rem;
+  border-bottom: 1px solid var(--ds-border);
+}
+.mobile-menu-head strong {
+  font-family: var(--ds-font-display);
+  font-size: 1.12rem;
+  font-weight: 700;
+  letter-spacing: -.01em;
+}
+.mobile-menu-close {
+  display: inline-grid;
+  place-items: center;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-surface-2);
+  color: var(--ds-text);
+  cursor: pointer;
+}
+
+/* Liens : pleine largeur, grandes cibles, couleur de la matière. */
+.js-nav .mobile-nav .nav-link {
+  display: flex;
+  width: 100%;
+  min-height: 3.35rem;
+  margin: .2rem 0;
+  padding: .6rem .85rem;
+  border: 1px solid transparent;
+  border-radius: var(--ds-radius) !important;
+  font-size: 1.05rem;
+  white-space: normal;
+}
+.js-nav .mobile-nav .nav-link:hover {
+  background: color-mix(in srgb, var(--accent, var(--ds-brand)) 10%, var(--ds-surface-2)) !important;
+  color: var(--accent-ink, var(--ds-text)) !important;
+}
+.js-nav .mobile-nav .nav-dot {
+  display: inline-flex;
+  width: .6rem;
+  height: .6rem;
+  margin-right: .3rem;
+}
+.js-nav .mobile-nav .nav-icon { width: 1.2rem; height: 1.2rem; margin-right: .35rem; }
+.js-nav .mobile-nav .nav-link[aria-current] {
+  background: color-mix(in srgb, var(--accent, var(--ds-brand)) 14%, var(--ds-surface)) !important;
+  color: var(--accent-ink, var(--ds-text)) !important;
+  border-color: color-mix(in srgb, var(--accent, var(--ds-brand)) 30%, var(--ds-border)) !important;
+}
+
+/* --------------------------------------------------------------------------
+   3. Fond assombri + verrouillage du défilement
+   -------------------------------------------------------------------------- */
+.mobile-menu-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 230;
+  background: rgba(10, 12, 18, .48);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--ds-motion) var(--ds-ease);
+}
+.menu-open .mobile-menu-backdrop { opacity: 1; pointer-events: auto; }
+html.menu-open,
+html.menu-open body { overflow: hidden; }
+
+/* --------------------------------------------------------------------------
+   4. Bureau : on masque le tiroir et le bouton
+   -------------------------------------------------------------------------- */
+@media (min-width: 1280px) {
+  .header-actions { grid-column: 3; }
+  .menu-toggle { display: none !important; }
+  /* Meme specificite que le tiroir (.js-nav .mobile-nav) pour l'emporter. */
+  .js-nav .mobile-nav,
+  .mobile-menu-backdrop { display: none !important; }
+}
+
+/* --------------------------------------------------------------------------
+   5. Confort tactile général sur téléphone
+   -------------------------------------------------------------------------- */
+@media (max-width: 640px) {
+  .site-header > .page-container { min-height: var(--ds-header-h); }
+  .logo-mark, .admin-brand span { width: 2.4rem; height: 2.4rem; }
+  /* Les commandes d'outils s'agrandissent un peu. */
+  .timer-btn, .outil-actions .btn-primary, .outil-actions .btn-secondary {
+    min-height: 2.9rem;
+    padding-inline: 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js-nav .mobile-nav { transition: none; }
+  .mobile-menu-backdrop { transition: none; }
+}

@@ -1,0 +1,2 @@
+-- V61 ne modifie pas la structure de la base de donnees.
+-- Les contenus et les donnees V60 restent directement compatibles.

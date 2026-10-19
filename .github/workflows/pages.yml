@@ -1,0 +1,51 @@
+name: Publish static assets
+
+# GitHub Pages ne peut pas executer PHP/MySQL : ce workflow publie uniquement les
+# fichiers statiques (CSS compile, images, JS, pages HTML). Le site dynamique est
+# deploye sur l'hebergement mutualise (voir INSTALLATION_SHARED_HOSTING.md).
+#
+# Aucune etape npm n'est necessaire : dist/output.css est genere par
+# tools/build-css.sh et versionne dans le depot.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verify compiled stylesheet is present
+        run: test -s dist/output.css || { echo "dist/output.css manquant : lancer tools/build-css.sh"; exit 1; }
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: "."
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,334 @@
+/* ==========================================================================
+   V81 — Outils de classe
+   --------------------------------------------------------------------------
+   Espace enseignant : minuteur, formation de groupes, tirage au sort,
+   consignes a projeter, des, chronometre et horloge. Tout est concu pour le
+   videoprojecteur : grands caracteres, contrastes forts, mode plein ecran.
+   ========================================================================== */
+
+.outils-hero {
+  max-width: 62rem;
+  margin-top: var(--ds-space-6);
+  padding: var(--ds-space-8);
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-xl);
+  background: var(--ds-surface);
+  box-shadow: var(--ds-shadow-card);
+}
+.outils-hero .chapter-hero-summary { margin-top: var(--ds-space-4); max-width: 60ch; }
+
+.outils-tabs { margin-top: var(--ds-space-6); }
+.outil-panel {
+  padding: var(--ds-space-6);
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-lg);
+  background: var(--ds-surface);
+  box-shadow: var(--ds-shadow-card);
+}
+.outil-panel + .outil-panel { margin-top: 0; }
+
+.outil-head { max-width: 70ch; margin-bottom: var(--ds-space-5); }
+.outil-head .muted { margin-top: var(--ds-space-2); }
+
+/* --------------------------------------------------------------------------
+   1. Formulaires d'outil
+   -------------------------------------------------------------------------- */
+.outil-grid {
+  display: grid;
+  gap: var(--ds-space-5);
+  grid-template-columns: minmax(0, 1fr);
+}
+@media (min-width: 860px) {
+  .outil-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
+  .outil-grid > .outil-card:only-child { grid-column: 1 / -1; }
+}
+
+.outil-card {
+  padding: var(--ds-space-5);
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius);
+  background: var(--ds-surface-2);
+}
+.outil-card h3 { margin: 0 0 var(--ds-space-3); font-size: 1.05rem; }
+
+.outil-label {
+  display: block;
+  margin-bottom: .35rem;
+  font-size: .82rem;
+  font-weight: 700;
+  letter-spacing: .02em;
+  color: var(--ds-text-soft);
+}
+.outil-input,
+.outil-textarea {
+  width: 100%;
+  padding: .7rem .85rem;
+  border: 1px solid var(--ds-border-strong);
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-surface);
+  color: var(--ds-text);
+  font: inherit;
+}
+.outil-input:focus-visible,
+.outil-textarea:focus-visible { outline: 2px solid var(--ds-brand); outline-offset: 1px; }
+.outil-input.is-narrow { max-width: 6rem; }
+.outil-textarea { resize: vertical; min-height: 9rem; line-height: 1.7; }
+
+.outil-hint { margin-top: .45rem; color: var(--ds-text-faint); font-size: .8rem; }
+
+.outil-fieldset {
+  margin: 0 0 var(--ds-space-4);
+  padding: var(--ds-space-3) var(--ds-space-4);
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-surface);
+}
+.outil-fieldset legend { padding-inline: .35rem; font-size: .82rem; font-weight: 700; color: var(--ds-text-soft); }
+.outil-radio,
+.outil-switch {
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+  min-height: 2.4rem;
+  font-size: .92rem;
+  color: var(--ds-text-soft);
+  cursor: pointer;
+}
+.outil-switch { margin-top: var(--ds-space-3); }
+
+.outil-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ds-space-3);
+  margin-top: var(--ds-space-5);
+}
+.outil-inline { display: flex; flex-wrap: wrap; align-items: end; gap: var(--ds-space-3); }
+.outil-inline .outil-input { flex: 1 1 16rem; }
+
+/* --------------------------------------------------------------------------
+   2. Groupes
+   -------------------------------------------------------------------------- */
+.group-output {
+  display: grid;
+  gap: var(--ds-space-4);
+  margin-top: var(--ds-space-6);
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
+}
+.group-card {
+  padding: var(--ds-space-4) var(--ds-space-5);
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius);
+  border-top: 4px solid var(--accent, var(--ds-brand));
+  background: var(--ds-surface-2);
+}
+.group-card header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--ds-space-2);
+  margin-bottom: var(--ds-space-3);
+  padding-bottom: var(--ds-space-2);
+  border-bottom: 1px solid var(--ds-border);
+}
+.group-card header strong { font-family: var(--ds-font-display); font-size: 1.05rem; }
+.group-card header span { color: var(--ds-text-faint); font-size: .78rem; font-weight: 650; }
+.group-card ol { margin: 0; padding-left: 1.1rem; }
+.group-card li { padding-block: .18rem; font-size: .95rem; }
+.group-card:nth-child(4n+1) { --accent: #2563eb; }
+.group-card:nth-child(4n+2) { --accent: #16a34a; }
+.group-card:nth-child(4n+3) { --accent: #d97706; }
+.group-card:nth-child(4n+4) { --accent: #db2777; }
+
+/* --------------------------------------------------------------------------
+   3. Tirage au sort
+   -------------------------------------------------------------------------- */
+.tirage-stage {
+  display: grid;
+  place-items: center;
+  gap: var(--ds-space-3);
+  min-height: 14rem;
+  padding: var(--ds-space-8) var(--ds-space-6);
+  border-radius: var(--ds-radius-lg);
+  background: var(--ds-surface-2);
+  text-align: center;
+}
+.tirage-display {
+  margin: 0;
+  font-family: var(--ds-font-display);
+  font-size: clamp(2.6rem, 9vw, 6rem);
+  font-weight: 650;
+  line-height: 1.05;
+  letter-spacing: -.02em;
+  color: var(--ds-text);
+  transition: transform 90ms ease;
+}
+.tirage-stage.is-rolling .tirage-display { transform: scale(1.04); }
+.tirage-caption { margin: 0; color: var(--ds-text-faint); font-size: .95rem; font-weight: 650; }
+
+.tirage-order { margin: var(--ds-space-6) 0 0; padding: 0; list-style: none; display: grid; gap: .4rem; }
+.tirage-order li {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-3);
+  padding: .5rem .85rem;
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-surface-2);
+}
+.tirage-rank {
+  display: inline-grid;
+  place-items: center;
+  min-width: 1.7rem;
+  height: 1.7rem;
+  border-radius: var(--ds-radius-pill);
+  background: var(--ds-brand-soft);
+  color: var(--ds-brand-ink);
+  font-size: .78rem;
+  font-weight: 750;
+}
+
+/* --------------------------------------------------------------------------
+   4. Consignes
+   -------------------------------------------------------------------------- */
+.signal-grid {
+  display: grid;
+  gap: var(--ds-space-3);
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 10rem), 1fr));
+}
+.signal-tile {
+  min-height: 3.4rem;
+  padding: var(--ds-space-3) var(--ds-space-4);
+  border: 1px solid var(--ds-border-strong);
+  border-radius: var(--ds-radius);
+  background: var(--ds-surface);
+  color: var(--ds-text);
+  font-size: .95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform var(--ds-motion-fast) var(--ds-ease), box-shadow var(--ds-motion-fast) var(--ds-ease);
+}
+.signal-tile:hover { transform: translateY(-2px); box-shadow: var(--ds-shadow-md); }
+.signal-tile.is-active {
+  border-color: var(--ds-brand);
+  background: var(--ds-brand-soft);
+  color: var(--ds-brand-ink);
+}
+
+.consigne-stage {
+  display: grid;
+  place-items: center;
+  gap: var(--ds-space-4);
+  min-height: 16rem;
+  margin-top: var(--ds-space-5);
+  padding: var(--ds-space-8) var(--ds-space-6);
+  border-radius: var(--ds-radius-lg);
+  background: var(--ds-surface-2);
+  border: 2px dashed var(--ds-border-strong);
+  text-align: center;
+}
+.consigne-icon { font-size: clamp(3rem, 10vw, 6rem); line-height: 1; }
+.consigne-text {
+  margin: 0;
+  font-family: var(--ds-font-display);
+  font-size: clamp(1.8rem, 5vw, 3.4rem);
+  font-weight: 620;
+  line-height: 1.15;
+  letter-spacing: -.015em;
+  color: var(--ds-text);
+}
+.consigne-stage[data-tone="calm"] { border-color: var(--ds-info); background: var(--ds-info-soft); }
+.consigne-stage[data-tone="work"] { border-color: var(--ds-success); background: var(--ds-success-soft); }
+.consigne-stage[data-tone="ask"] { border-color: var(--ds-warning); background: var(--ds-warning-soft); }
+.consigne-stage[data-tone="end"] { border-color: var(--ds-danger); background: var(--ds-danger-soft); }
+.consigne-stage[data-tone="custom"] { border-color: var(--ds-brand); background: var(--ds-brand-soft); border-style: solid; }
+
+/* --------------------------------------------------------------------------
+   5. Dés, chrono, horloge
+   -------------------------------------------------------------------------- */
+.dice-row { display: flex; flex-wrap: wrap; gap: var(--ds-space-3); margin: var(--ds-space-4) 0; min-height: 4.5rem; align-items: center; }
+.die {
+  display: grid;
+  place-items: center;
+  width: 4rem;
+  height: 4rem;
+  border-radius: var(--ds-radius);
+  background: var(--ds-surface);
+  border: 2px solid var(--ds-border-strong);
+  box-shadow: var(--ds-shadow-sm);
+  font-size: 1.8rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.dice-row.is-rolling .die { animation: die-shake 220ms ease-in-out infinite; }
+@keyframes die-shake {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-4px) rotate(6deg); }
+}
+
+.chrono-display,
+.clock-display {
+  margin: var(--ds-space-4) 0;
+  font-size: clamp(2.4rem, 8vw, 4.5rem);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  letter-spacing: -.03em;
+  color: var(--ds-text);
+}
+
+/* --------------------------------------------------------------------------
+   6. Grand affichage (plein écran)
+   -------------------------------------------------------------------------- */
+.outil-panel:fullscreen {
+  display: grid;
+  align-content: center;
+  gap: var(--ds-space-6);
+  padding: var(--ds-space-10);
+  border: 0;
+  border-radius: 0;
+  background: var(--ds-bg);
+  overflow: auto;
+}
+.outil-panel:fullscreen .main-display { font-size: clamp(6rem, 22vw, 18rem); }
+.outil-panel:fullscreen .tirage-display { font-size: clamp(4rem, 16vw, 12rem); }
+.outil-panel:fullscreen .consigne-text { font-size: clamp(3rem, 11vw, 8rem); }
+.outil-panel:fullscreen .consigne-icon { font-size: clamp(5rem, 16vw, 10rem); }
+.outil-panel:fullscreen .chrono-display,
+.outil-panel:fullscreen .clock-display { font-size: clamp(4rem, 15vw, 10rem); }
+.outil-panel:fullscreen .outil-head,
+.outil-panel:fullscreen .outil-card,
+.outil-panel:fullscreen .outil-grid { max-width: 90rem; margin-inline: auto; width: 100%; }
+
+/* L'en-tete du site est masque pendant la projection. */
+body:has(.outil-panel:fullscreen) .site-header { display: none; }
+
+/* --------------------------------------------------------------------------
+   7. Impression : uniquement les groupes
+   -------------------------------------------------------------------------- */
+@media print {
+  .outils-tabs,
+  .outil-head .muted,
+  .outil-grid,
+  .outil-actions,
+  .site-header,
+  .site-footer,
+  .reading-progress { display: none !important; }
+  .outil-panel { border: 0; box-shadow: none; padding: 0; }
+  .group-output { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .group-card { break-inside: avoid; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dice-row.is-rolling .die { animation: none; }
+  .tirage-stage.is-rolling .tirage-display { transform: none; }
+  .signal-tile { transition: none; }
+}
+
+.dice-total {
+  margin: 0 0 var(--ds-space-2);
+  font-family: var(--ds-font-display);
+  font-size: 1.5rem;
+  font-weight: 650;
+  color: var(--ds-text);
+}
+.outil-panel:fullscreen .dice-total { font-size: clamp(2rem, 6vw, 4rem); }

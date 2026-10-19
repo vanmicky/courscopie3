@@ -1,0 +1,2 @@
+-- V70 : aucune modification de structure.
+-- Les espaces Brevet et Bac reutilisent exercises.category ajoute en V65.

@@ -1,0 +1,13 @@
+# Dossier des images envoyées depuis l'administration.
+# Aucun script ne doit pouvoir s'exécuter ici, et le dossier n'est pas listable.
+Options -Indexes
+
+<FilesMatch "\.(php|phtml|phar|pl|py|cgi|sh|html?)$">
+  Require all denied
+</FilesMatch>
+
+<IfModule mod_mime.c>
+  AddType image/webp .webp
+  AddType image/png .png
+  AddType image/jpeg .jpg
+</IfModule>

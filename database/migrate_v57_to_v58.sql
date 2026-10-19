@@ -1,0 +1,2 @@
+-- V58 ne modifie pas la structure MySQL.
+-- Correctif fichiers PHP uniquement : chemins relatifs CSS/JS/assets pour hebergement mutualise.

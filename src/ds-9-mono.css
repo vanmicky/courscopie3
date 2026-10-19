@@ -1,0 +1,439 @@
+/* ==========================================================================
+   V84/V85 — Thème monochrome : le site en noir et blanc, par nuances de gris
+   --------------------------------------------------------------------------
+   Toute la chromatique decorative passe en gris. La seule couleur restante
+   vient des ACCENTS DE MATIERE (--accent, --method-accent), definis par les
+   pages a partir des niveaux, chapitres et domaines.
+
+   V85 ajoute la NUANCE : plutot qu'un gris plat, le site joue sur
+     • une echelle de gris unique (--ds-grey-0 a --ds-grey-950) ;
+     • des paliers tonals (fond < surface < surface surelevee) ;
+     • des degrades tres legers sur les surfaces, pour la profondeur ;
+     • des ombres en plusieurs couches, grises ;
+     • une hierarchie typographique par le ton (encre, gris moyen, gris clair).
+
+   Les couleurs d'etat (reussite, attention, erreur, information) ne sont pas
+   supprimees — elles portent un sens — mais fortement desaturees.
+
+   Cette couche est chargee en DERNIER : elle surcharge les jetons des couches
+   precedentes sans les modifier, et se retire en supprimant son import.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Echelle de gris
+   -------------------------------------------------------------------------- */
+:root {
+  --ds-grey-0:   #ffffff;
+  --ds-grey-25:  #fcfcfd;
+  --ds-grey-50:  #f8f8f9;
+  --ds-grey-100: #f4f4f5;
+  --ds-grey-150: #ededef;
+  --ds-grey-200: #e4e4e7;
+  --ds-grey-300: #d4d4d8;
+  --ds-grey-400: #a1a1aa;
+  --ds-grey-500: #71717a;
+  --ds-grey-600: #52525b;
+  --ds-grey-700: #3f3f46;
+  --ds-grey-800: #27272a;
+  --ds-grey-900: #18181b;
+  --ds-grey-950: #09090b;
+}
+
+/* --------------------------------------------------------------------------
+   2. Jetons semantiques — clair
+   -------------------------------------------------------------------------- */
+:root {
+  --ds-bg: var(--ds-grey-100);
+  --ds-bg-tint: var(--ds-grey-150);
+  --ds-surface: var(--ds-grey-0);
+  --ds-surface-2: var(--ds-grey-50);
+  --ds-surface-3: var(--ds-grey-150);
+  --ds-surface-invert: var(--ds-grey-900);
+  --ds-text: var(--ds-grey-900);
+  --ds-text-soft: var(--ds-grey-600);
+  --ds-text-faint: #63636b;
+  --ds-text-invert: var(--ds-grey-0);
+  --ds-border: var(--ds-grey-200);
+  --ds-border-strong: var(--ds-grey-300);
+  --ds-border-soft: #f1f1f3;
+
+  /* La marque devient du graphite : boutons, logo, focus, filets. */
+  --ds-brand: var(--ds-grey-800);
+  --ds-brand-strong: var(--ds-grey-900);
+  --ds-brand-stronger: var(--ds-grey-950);
+  --ds-brand-soft: var(--ds-grey-100);
+  --ds-brand-border: var(--ds-grey-300);
+  --ds-brand-ink: var(--ds-grey-900);
+
+  --ds-grad-brand: linear-gradient(135deg, #4b4b53 0%, var(--ds-grey-800) 46%, var(--ds-grey-950) 100%);
+  --ds-grad-brand-soft: linear-gradient(135deg, var(--ds-grey-25) 0%, var(--ds-grey-150) 100%);
+
+  /* Ombres en plusieurs couches, grises. */
+  --ds-shadow-xs: 0 1px 2px rgba(24, 24, 27, .05);
+  --ds-shadow-sm: 0 1px 2px rgba(24, 24, 27, .06), 0 1px 3px rgba(24, 24, 27, .05);
+  --ds-shadow-md: 0 1px 2px rgba(24, 24, 27, .05), 0 4px 10px rgba(24, 24, 27, .07);
+  --ds-shadow-lg: 0 2px 4px rgba(24, 24, 27, .05), 0 14px 30px rgba(24, 24, 27, .10);
+  --ds-shadow-xl: 0 8px 16px rgba(24, 24, 27, .08), 0 28px 56px rgba(24, 24, 27, .14);
+  --ds-shadow-card: 0 1px 2px rgba(24, 24, 27, .04), 0 3px 10px rgba(24, 24, 27, .05);
+  --ds-shadow-hover: 0 2px 5px rgba(24, 24, 27, .06), 0 16px 32px rgba(24, 24, 27, .11);
+
+  --ds-pattern-dot: rgba(24, 24, 27, .085);
+
+  /* Etats desatures : le sens reste, la couleur s'efface. */
+  --ds-success: #476b55;
+  --ds-success-ink: #2c4636;
+  --ds-success-soft: #f2f5f3;
+  --ds-success-border: #c6d3ca;
+  --ds-warning: #6f5a33;
+  --ds-warning-ink: #4d3f24;
+  --ds-warning-soft: #f6f4ef;
+  --ds-warning-border: #ddd2b8;
+  --ds-danger: #754b47;
+  --ds-danger-ink: #523431;
+  --ds-danger-soft: #f6f2f1;
+  --ds-danger-border: #dcc7c3;
+  --ds-info: #4a5a69;
+  --ds-info-ink: #333f4a;
+  --ds-info-soft: #f2f4f6;
+  --ds-info-border: #c8d0d7;
+}
+
+/* --------------------------------------------------------------------------
+   3. Jetons semantiques — sombre
+   -------------------------------------------------------------------------- */
+html.dark {
+  --ds-grey-0:   #0b0b0c;
+  --ds-grey-25:  #121214;
+  --ds-grey-50:  #17171a;
+  --ds-grey-100: #131315;
+  --ds-grey-150: #1e1e22;
+  --ds-grey-200: #27272b;
+  --ds-grey-300: #3f3f46;
+  --ds-grey-400: #5c5c66;
+  --ds-grey-500: #7c7c86;
+  --ds-grey-600: #a1a1aa;
+  --ds-grey-700: #c4c4cb;
+  --ds-grey-800: #e4e4e7;
+  --ds-grey-900: #f4f4f5;
+  --ds-grey-950: #fafafa;
+
+  --ds-bg: #0b0b0c;
+  --ds-bg-tint: #101012;
+  --ds-surface: #151517;
+  --ds-surface-2: #1c1c1f;
+  --ds-surface-3: #26262a;
+  --ds-surface-invert: var(--ds-grey-950);
+  --ds-text: var(--ds-grey-900);
+  --ds-text-soft: #c6c6cc;
+  --ds-text-faint: #9a9aa2;
+  --ds-text-invert: #0b0b0c;
+  --ds-border: #27272b;
+  --ds-border-strong: #3f3f46;
+  --ds-border-soft: #1d1d20;
+
+  --ds-brand: #d4d4d8;
+  --ds-brand-strong: #a1a1aa;
+  --ds-brand-stronger: var(--ds-grey-950);
+  --ds-brand-soft: #1f1f23;
+  --ds-brand-border: #3f3f46;
+  --ds-brand-ink: var(--ds-grey-950);
+
+  --ds-grad-brand: linear-gradient(135deg, #5a5a63 0%, #3f3f46 46%, #27272a 100%);
+  --ds-grad-brand-soft: linear-gradient(135deg, #1f1f23 0%, #26262a 100%);
+
+  --ds-shadow-card: 0 1px 2px rgba(0, 0, 0, .4), 0 4px 12px rgba(0, 0, 0, .32);
+  --ds-shadow-hover: 0 2px 6px rgba(0, 0, 0, .45), 0 18px 40px rgba(0, 0, 0, .5);
+
+  --ds-pattern-dot: rgba(255, 255, 255, .045);
+
+  --ds-success: #9fb8a8;
+  --ds-success-ink: #cfe0d6;
+  --ds-success-soft: #16201a;
+  --ds-success-border: #2f4638;
+  --ds-warning: #c3b18c;
+  --ds-warning-ink: #e3d6b8;
+  --ds-warning-soft: #211d14;
+  --ds-warning-border: #4d4227;
+  --ds-danger: #c1a09c;
+  --ds-danger-ink: #e0c9c5;
+  --ds-danger-soft: #201716;
+  --ds-danger-border: #4a3532;
+  --ds-info: #a6b3be;
+  --ds-info-ink: #cdd6dd;
+  --ds-info-soft: #16191d;
+  --ds-info-border: #333d46;
+}
+
+/* --------------------------------------------------------------------------
+   4. Atmosphère : dégradé de fond + halos gris
+   --------------------------------------------------------------------------
+   Le fond n'est plus un aplat : un dégradé vertical très léger (50 -> 150) et
+   deux halos donnent une profondeur perceptible sans jamais gêner la lecture.
+   -------------------------------------------------------------------------- */
+body {
+  background:
+    radial-gradient(1200px 480px at 18% -120px, rgba(24, 24, 27, .05), transparent 70%),
+    radial-gradient(1000px 420px at 88% -160px, rgba(24, 24, 27, .03), transparent 65%),
+    linear-gradient(180deg, var(--ds-grey-50) 0%, var(--ds-grey-100) 42%, var(--ds-grey-150) 100%) !important;
+  background-attachment: scroll, scroll, fixed !important;
+}
+html.dark body {
+  background:
+    radial-gradient(1200px 480px at 18% -120px, rgba(255, 255, 255, .05), transparent 70%),
+    radial-gradient(1000px 420px at 88% -160px, rgba(255, 255, 255, .03), transparent 65%),
+    linear-gradient(180deg, #101012 0%, #0b0b0c 46%, #08080a 100%) !important;
+  background-attachment: scroll, scroll, fixed !important;
+}
+
+/* Pages intérieures : mêmes halos, plus le semis de points. */
+body.page-inner {
+  background-color: var(--ds-bg) !important;
+  background-image:
+    radial-gradient(1200px 480px at 18% -120px, rgba(24, 24, 27, .05), transparent 70%),
+    radial-gradient(1000px 420px at 88% -160px, rgba(24, 24, 27, .03), transparent 65%),
+    radial-gradient(circle at 1px 1px, var(--ds-pattern-dot) 1.1px, transparent 1.6px) !important;
+  background-size: auto, auto, var(--ds-pattern-size) var(--ds-pattern-size) !important;
+  background-repeat: no-repeat, no-repeat, repeat !important;
+  background-position: 0 0, 0 0, 0 0 !important;
+}
+html.dark body.page-inner {
+  background-color: var(--ds-bg) !important;
+  background-image:
+    radial-gradient(1200px 480px at 18% -120px, rgba(255, 255, 255, .05), transparent 70%),
+    radial-gradient(1000px 420px at 88% -160px, rgba(255, 255, 255, .03), transparent 65%),
+    radial-gradient(circle at 1px 1px, var(--ds-pattern-dot) 1.1px, transparent 1.6px) !important;
+  background-size: auto, auto, var(--ds-pattern-size) var(--ds-pattern-size) !important;
+  background-repeat: no-repeat, no-repeat, repeat !important;
+  background-position: 0 0, 0 0, 0 0 !important;
+}
+
+/* --------------------------------------------------------------------------
+   5. Nuance des surfaces
+   --------------------------------------------------------------------------
+   Chaque surface reçoit un dégradé vertical de 2 à 3 % : le haut est le plus
+   clair, le bas se pose sur le gris suivant. C'est ce qui remplace les aplats
+   et crée la profondeur. `background-image` se superpose à la couleur de fond
+   posée par les couches précédentes : les teintes d'accent sont conservées.
+   -------------------------------------------------------------------------- */
+/* `.editorial-home .level-card` (couche historique, spécificité 0,2,0) impose un
+   fond plat : on la reprend explicitement pour que la carte de niveau reçoive
+   aussi sa nuance. */
+.editorial-home .level-card,
+.card,
+.chapter-tile,
+.level-card,
+.method-card,
+.document-resource-card,
+.chapter-activity-card,
+.chapter-video-card,
+.exercise-prep-card,
+.skill-group,
+.qcm-question-card,
+.flashcard-study-shell,
+.timer-card,
+.outil-card,
+.outil-panel,
+.group-card {
+  background-image: linear-gradient(180deg, var(--ds-grey-0) 0%, var(--ds-grey-25) 55%, var(--ds-grey-50) 100%) !important;
+}
+html.dark .editorial-home .level-card,
+html.dark .card,
+html.dark .chapter-tile,
+html.dark .level-card,
+html.dark .method-card,
+html.dark .document-resource-card,
+html.dark .chapter-activity-card,
+html.dark .chapter-video-card,
+html.dark .exercise-prep-card,
+html.dark .skill-group,
+html.dark .qcm-question-card,
+html.dark .flashcard-study-shell,
+html.dark .timer-card,
+html.dark .outil-card,
+html.dark .outil-panel,
+html.dark .group-card {
+  background-image: linear-gradient(180deg, #1a1a1e 0%, #151517 60%, #121214 100%) !important;
+}
+
+/* Les héros se détachent d'un ton : plus clairs en haut, ils reçoivent la
+   teinte de la matière posée par ds-4 par-dessus. */
+/* `.editorial-level .level-hero` est mis à `background: none` par la couche
+   historique : on rétablit une surface, pour que le titre ne repose pas
+   directement sur le motif. */
+.editorial-level .level-hero,
+.home-hero,
+.level-hero,
+.work-global-hero,
+.chapter-page-hero,
+.exam-hero,
+.method-page-hero,
+.methods-hero,
+.outils-hero,
+.learn2-hero {
+  background-image: linear-gradient(165deg, var(--ds-grey-0) 0%, var(--ds-grey-50) 48%, var(--ds-grey-150) 100%) !important;
+}
+html.dark .editorial-level .level-hero,
+html.dark .home-hero,
+html.dark .level-hero,
+html.dark .work-global-hero,
+html.dark .chapter-page-hero,
+html.dark .exam-hero,
+html.dark .method-page-hero,
+html.dark .methods-hero,
+html.dark .learn2-hero,
+html.dark .outils-hero {
+  background-image: linear-gradient(165deg, #1c1c20 0%, #17171a 48%, #121214 100%) !important;
+}
+
+/* En-tête et pied de page : deux paliers tonals distincts du fond. */
+.site-header {
+  background: color-mix(in srgb, var(--ds-grey-0) 86%, transparent) !important;
+  border-bottom: 1px solid var(--ds-border) !important;
+}
+html.dark .site-header { background: color-mix(in srgb, #151517 88%, transparent) !important; }
+.site-footer {
+  background-image: linear-gradient(180deg, var(--ds-grey-50) 0%, var(--ds-grey-100) 100%) !important;
+  border-top: 1px solid var(--ds-border) !important;
+}
+html.dark .site-footer { background-image: linear-gradient(180deg, #131315 0%, #0e0e10 100%) !important; }
+
+/* Champs, tableaux et jauges : encore un palier. */
+input, select, textarea,
+.outil-input, .outil-textarea {
+  background-image: linear-gradient(180deg, var(--ds-grey-50) 0%, var(--ds-grey-0) 70%) !important;
+}
+html.dark input, html.dark select, html.dark textarea,
+html.dark .outil-input, html.dark .outil-textarea {
+  background-image: linear-gradient(180deg, #101012 0%, #17171a 70%) !important;
+}
+thead th, .chapter-hero-stats {
+  background-image: linear-gradient(180deg, var(--ds-grey-150) 0%, var(--ds-grey-100) 100%);
+}
+html.dark thead th, html.dark .chapter-hero-stats {
+  background-image: linear-gradient(180deg, #1c1c20 0%, #17171a 100%);
+}
+
+/* Boutons : dégradé graphite et liseré clair en haut, pour un léger relief. */
+.btn-primary {
+  background-image: var(--ds-grad-brand) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .14), var(--ds-shadow-sm) !important;
+}
+.btn-primary:hover { box-shadow: inset 0 1px 0 rgba(255, 255, 255, .18), var(--ds-shadow-md) !important; }
+.btn-secondary {
+  background-image: linear-gradient(180deg, var(--ds-grey-0) 0%, var(--ds-grey-50) 100%) !important;
+}
+html.dark .btn-secondary {
+  background-image: linear-gradient(180deg, #1e1e22 0%, #17171a 100%) !important;
+}
+
+/* Le panneau de lecture de la fiche méthode : papier blanc, très légèrement
+   dégradé. */
+.method-detail .learn2-hero,
+.method-detail .learn2-layout > div:not(.learn2-sidebar) {
+  background-image: linear-gradient(180deg, var(--ds-grey-0) 0%, var(--ds-grey-25) 100%) !important;
+}
+html.dark .method-detail .learn2-hero,
+html.dark .method-detail .learn2-layout > div:not(.learn2-sidebar) {
+  background-image: linear-gradient(180deg, #17171a 0%, #131315 100%) !important;
+}
+
+/* --------------------------------------------------------------------------
+   6. Dérivation des accents : bases neutres
+   --------------------------------------------------------------------------
+   Les variantes d'accent etaient melangees a un bleu tres sombre (#0b1220,
+   #0d1526) : les aplats d'accent tiraient donc vers le bleu. On reprend les
+   memes melanges avec des bases graphites, pour que seule la teinte de la
+   matiere reste perceptible.
+   -------------------------------------------------------------------------- */
+[style*="--accent"],
+.level-color-theme,
+.card,
+.chapter-tile,
+.level-card,
+.exam-entry,
+.chapter-resource-page,
+.level-theme-cinquieme,
+.level-theme-troisieme,
+.level-theme-seconde-pc,
+.level-theme-seconde-maths,
+.level-theme-premiere-pc,
+.level-theme-premiere-nsi {
+  --accent-ink: color-mix(in srgb, var(--accent) 52%, #09090b);
+  --accent-deep: color-mix(in srgb, var(--accent) 44%, #131316);
+  --accent-soft: color-mix(in srgb, var(--accent) 6%, var(--ds-surface));
+  --accent-soft-2: color-mix(in srgb, var(--accent) 11%, var(--ds-surface));
+  --accent-line: color-mix(in srgb, var(--accent) 26%, var(--ds-border));
+}
+
+/* En thème sombre, l'« encre d'accent » doit être CLAIRE : c'est du texte posé
+   sur une teinte d'accent sombre. Sans cette variante, le surlignage du
+   sommaire et les liens courants devenaient illisibles (2,4:1). */
+html.dark [style*="--accent"],
+html.dark .level-color-theme,
+html.dark .card,
+html.dark .chapter-tile,
+html.dark .level-card,
+html.dark .exam-entry,
+html.dark .chapter-resource-page,
+html.dark .level-theme-cinquieme,
+html.dark .level-theme-troisieme,
+html.dark .level-theme-seconde-pc,
+html.dark .level-theme-seconde-maths,
+html.dark .level-theme-premiere-pc,
+html.dark .level-theme-premiere-nsi {
+  --accent-ink: color-mix(in srgb, var(--accent) 55%, #ffffff);
+  --accent-deep: color-mix(in srgb, var(--accent) 62%, #0b0b0c);
+  --accent-soft: color-mix(in srgb, var(--accent) 18%, var(--ds-surface));
+  --accent-soft-2: color-mix(in srgb, var(--accent) 26%, var(--ds-surface));
+  --accent-line: color-mix(in srgb, var(--accent) 34%, var(--ds-border));
+}
+
+/* --------------------------------------------------------------------------
+   7. Derniers restes de couleur décorative
+   -------------------------------------------------------------------------- */
+
+/* Logo et bouton du minuteur en mode sombre : plus d'indigo. */
+html.dark .logo-mark,
+html.dark .admin-brand span { background: var(--ds-grad-brand) !important; }
+html.dark .timer-btn { border-color: var(--ds-border-strong) !important; }
+
+/* L'encadré « Règle d'or » de la fiche méthode : graphite au lieu du bleu nuit.
+   Couleurs écrites en dur : en mode sombre l'échelle de gris est inversée, donc
+   `var(--ds-grey-900)` y vaut un gris très clair et l'encadré deviendrait blanc
+   sous un texte clair. */
+.method-detail .learn2-rule-card {
+  background: #18181b !important;
+  background-image: linear-gradient(160deg, #2e2e33 0%, #09090b 100%) !important;
+}
+html.dark .method-detail .learn2-rule-card {
+  background: #1c1c20 !important;
+  background-image: linear-gradient(160deg, #26262a 0%, #101012 100%) !important;
+}
+.method-detail .learn2-rule-card strong { color: #d4d4d8 !important; }
+
+/* Info-bulle des flashcards : elle était en vert à 72 % d'opacité (2,9:1).
+   On passe sur l'encre d'accent, opaque. */
+.flash-hint,
+.flash-card-inner .flash-hint { color: var(--accent-ink, var(--ds-text)) !important; }
+
+/* Groupes de l'outil de classe : quatre gris au lieu de quatre couleurs. */
+.group-card:nth-child(4n+1) { --accent: var(--ds-grey-700); }
+.group-card:nth-child(4n+2) { --accent: var(--ds-grey-500); }
+.group-card:nth-child(4n+3) { --accent: var(--ds-grey-400); }
+.group-card:nth-child(4n+4) { --accent: var(--ds-grey-600); }
+
+/* Coloration syntaxique : conservée mais fortement désaturée, pour que les
+   blocs Python ne soient pas la seule tache colorée du site. */
+.token.keyword, .code-keyword { color: #4a4a68 !important; }
+.token.string, .code-string { color: #3f5b4a !important; }
+.token.number, .code-number { color: #6a5a3c !important; }
+.token.comment, .code-comment { color: #6b6b74 !important; }
+.token.function, .code-function { color: #3f4d68 !important; }
+html.dark .token.keyword, html.dark .code-keyword { color: #b8b8d0 !important; }
+html.dark .token.string, html.dark .code-string { color: #a8c4b2 !important; }
+html.dark .token.number, html.dark .code-number { color: #cdbb9a !important; }
+html.dark .token.comment, html.dark .code-comment { color: #8a8a93 !important; }
+html.dark .token.function, html.dark .code-function { color: #adbcd4 !important; }
+
+/* Le feu tricolore de niveau sonore garde ses trois couleurs : c'est un signal
+   de classe, pas une décoration. Rien n'est modifié ici, volontairement. */

@@ -1,0 +1,258 @@
+/* ==========================================================================
+   V100 — Cartes mémoire : recto/verso et hauteur de carte
+   --------------------------------------------------------------------------
+   La règle `.flash-side` qui superposait les deux faces avait disparu des
+   couches CSS : recto et verso se retrouvaient empilés dans le flux (97 px +
+   57 px), d'où une carte de 320 px dont la moitié était vide, et une réponse
+   affichée en même temps que la question.
+
+   On rétablit une pile 3D : les deux faces occupent la même cellule, seule
+   celle qui est tournée vers l'utilisateur est visible.
+   ========================================================================== */
+
+.flash-card-inner {
+  display: grid !important;
+  grid-template-areas: "carte";
+  grid-template-columns: minmax(0, 1fr);
+  min-height: clamp(14rem, 32vh, 20rem) !important;
+  transform-style: preserve-3d;
+}
+.flash-card-clickable {
+  min-height: 0 !important;
+}
+
+.flash-side {
+  grid-area: carte;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: .35rem;
+  padding: clamp(1.5rem, 4vw, 2.5rem) !important;
+  border: 1px solid color-mix(in srgb, var(--accent, #2563eb) 32%, #ffffff);
+  border-radius: var(--ds-radius-lg) !important;
+  text-align: center;
+  /* Une seule face visible à la fois, même sans transformation 3D. */
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.flash-side.back {
+  transform: rotateY(180deg);
+}
+
+/* Sécurité : la face opposée est masquée tant que la carte n'est pas tournée. */
+.flash-card-clickable:not(.is-flipped) .flash-side.back { visibility: hidden; }
+.flash-card-clickable.is-flipped .flash-side.front { visibility: hidden; }
+
+/* Titres et réponses : une hiérarchie lisible, sans déborder. */
+.flash-side .flash-front-title,
+.flash-side .flash-answer-title {
+  font-size: clamp(1.15rem, 2.4vw, 1.55rem) !important;
+  font-weight: 800 !important;
+  line-height: 1.25 !important;
+  max-width: 28ch;
+}
+.flash-side .flash-front,
+.flash-side .flash-back {
+  display: block;
+  max-width: 46ch;
+  margin-inline: auto;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+.flash-side .flash-hint {
+  margin-top: 1.1rem !important;
+  font-size: .82rem !important;
+  font-weight: 600 !important;
+  /* Un texte semi-transparent tombait à 2,8:1 : on garde la couleur du texte
+     et on distingue l'indice par la taille et la graisse. */
+  color: inherit !important;
+  opacity: .9;
+}
+
+/* Bandeau de progression : les deux compteurs restent dans le cadre. */
+.flash-progress {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: .5rem;
+}
+.flash-progress .quiz-score-pill {
+  min-width: 0;
+  max-width: 100%;
+  white-space: nowrap;
+}
+
+/* Barre d'actions : trois boutons de même hauteur, centrés. */
+.flash-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  justify-content: center;
+  gap: .6rem;
+}
+.flash-nav button {
+  min-height: 2.75rem;
+  border-radius: var(--ds-radius-sm);
+}
+
+@media (max-width: 560px) {
+  .flash-side .flash-front-title,
+  .flash-side .flash-answer-title { font-size: 1.1rem !important; }
+  .flash-side { padding: 1.15rem !important; }
+  .flash-nav button { flex: 1 1 100%; }
+}
+
+/* --------------------------------------------------------------------------
+   Barre de progression, mélange, raccourcis et bilan
+   --------------------------------------------------------------------------
+   La progression n'était donnée que par du texte. On ajoute une barre, des
+   raccourcis lisibles et un bilan qui permet de ne revoir que les cartes
+   ratées.
+   -------------------------------------------------------------------------- */
+.flash-bar {
+  position: relative;
+  height: .4rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--ds-surface-3, #ececf0);
+}
+.flash-bar-fill {
+  display: block;
+  width: 0;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--accent, #2563eb);
+  transition: width var(--ds-motion, .2s) ease;
+}
+html.dark .flash-bar { background: #26262b; }
+
+/* Touches affichées dans les boutons d'évaluation. */
+.flash-key {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.15rem;
+  height: 1.15rem;
+  margin-right: .4rem;
+  padding: 0 .25rem;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, .22);
+  font-size: .7rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+/* Ligne d'outils sous la navigation. */
+.flash-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: .5rem;
+  margin-top: .35rem;
+}
+.flash-shuffle {
+  padding: .4rem .8rem;
+  border: 1px solid var(--ds-border-strong);
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-surface);
+  color: var(--ds-text-soft);
+  font-size: .8rem;
+  font-weight: 650;
+  cursor: pointer;
+}
+.flash-shuffle:hover { background: var(--ds-surface-2); color: var(--ds-text); }
+.flash-shortcuts {
+  color: var(--ds-text-faint);
+  font-size: .74rem;
+  font-weight: 600;
+}
+@media (max-width: 560px) {
+  .flash-shortcuts { display: none; }
+}
+
+/* Bilan de fin de révision. */
+.flash-completion-score {
+  margin: .15rem 0 .35rem;
+  font-size: 2.2rem;
+  font-weight: 800;
+  letter-spacing: -.02em;
+  color: var(--accent, #2563eb);
+  font-variant-numeric: tabular-nums;
+}
+.flash-completion-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: .6rem;
+  margin-top: .9rem;
+}
+
+/* --------------------------------------------------------------------------
+   Deux couleurs distinctes : recto = question (bleu), verso = réponse (vert)
+   --------------------------------------------------------------------------
+   Le recto reprenait la couleur de la matière et le verso un vert pâle : les
+   deux faces se ressemblaient. On fixe désormais un code de couleur constant,
+   identique dans toutes les séries, pour savoir d'un coup d'œil si l'on voit la
+   question ou la réponse.
+   -------------------------------------------------------------------------- */
+.flash-side.front {
+  background: #eef2ff !important;
+  background-image: none !important;
+  border-color: #c7d2fe !important;
+  color: #1e3a8a !important;
+}
+.flash-side.front .flash-label {
+  background: #e0e7ff !important;
+  color: #1e3a8a !important;
+}
+.flash-side.back {
+  background: #f0fdf4 !important;
+  background-image: none !important;
+  border-color: #86efac !important;
+  color: #14532d !important;
+}
+.flash-side.back .flash-label {
+  background: #dcfce7 !important;
+  color: #14532d !important;
+}
+
+html.dark .flash-side.front,
+.dark .flash-side.front {
+  background: #111c33 !important;
+  background-image: none !important;
+  border-color: #26355a !important;
+  color: #c7d2fe !important;
+}
+html.dark .flash-side.front .flash-label,
+.dark .flash-side.front .flash-label {
+  background: #1b2949 !important;
+  color: #c7d2fe !important;
+}
+html.dark .flash-side.back,
+.dark .flash-side.back {
+  background: #052e16 !important;
+  background-image: none !important;
+  border-color: #166534 !important;
+  color: #bbf7d0 !important;
+}
+html.dark .flash-side.back .flash-label,
+.dark .flash-side.back .flash-label {
+  background: #0c3d1f !important;
+  color: #bbf7d0 !important;
+}
+
+/* Illustration d'une carte : largeur choisie dans l'administration. */
+.flash-card-image { display: flex; justify-content: center; margin-top: .75rem; }
+.flash-card-image[hidden] { display: none; }
+.flash-card-image img {
+  height: auto;
+  max-width: 100%;
+  max-height: 42vh;
+  object-fit: contain;
+  border: 1px solid currentColor;
+  border-radius: var(--ds-radius-sm);
+  background: #fff;
+}

@@ -1,0 +1,24 @@
+/* ==========================================================================
+   V86 — Correctifs transverses
+   --------------------------------------------------------------------------
+   Petite couche chargée en dernier, pour les défauts réels découverts lors des
+   audits automatiques (contraste, accessibilité) et qui ne dépendent pas d'un
+   thème. Elle ne contient que des corrections, jamais de choix esthétique.
+
+   Le thème monochrome (src/ds-9-mono.css) est compilé juste avant cette couche
+   depuis la V89 : le site est en noir et blanc. Les correctifs de contraste qui
+   suivent ne dépendent pas du thème et restent valables dans les deux cas.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Info-bulle des flashcards
+   --------------------------------------------------------------------------
+   La couche historique la définit en `color-mix(in srgb, currentColor 72%,
+   transparent)` : le texte devenait semi-transparent sur fond clair, soit
+   2,9:1 — en dessous du seuil AA. On passe sur l'encre d'accent, opaque.
+   -------------------------------------------------------------------------- */
+.flash-hint,
+.flash-card-inner .flash-hint,
+.flash-side .flash-hint {
+  color: var(--accent-ink, var(--ds-text)) !important;
+}

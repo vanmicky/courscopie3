@@ -1,0 +1,181 @@
+/* ==========================================================================
+   V77 — Refonte « éditoriale chaleureuse »
+   --------------------------------------------------------------------------
+   Le reproche portait sur l'allure « tableau de bord SaaS » : fond gris-bleu
+   froid, tout en Inter, cartes blanches impersonnelles. Cette couche change
+   de direction :
+     • fond crème chaud + encre profonde (au lieu du gris-bleu) ;
+     • titres en Inter, affirmes par la graisse et l'interlettrage ;
+     • ombres teintées de chaud, surfaces plus douces ;
+     • hiérarchie plus affirmée sur les héros.
+   Elle se charge après ds-4 et ne touche qu'aux jetons et aux titres :
+   tous les composants suivent automatiquement.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Palette chaude
+   -------------------------------------------------------------------------- */
+:root {
+  --ds-bg: #f6f2e8;
+  --ds-bg-tint: #eee7d8;
+  --ds-surface: #fffdf7;
+  --ds-surface-2: #f7f2e7;
+  --ds-surface-3: #efe8d9;
+  --ds-surface-invert: #1c1a24;
+  --ds-text: #1d1a24;
+  --ds-text-soft: #524d45;
+  --ds-text-faint: #635d51;
+  --ds-text-invert: #ffffff;
+  --ds-border: #e6decd;
+  --ds-border-strong: #d3c8b3;
+  --ds-border-soft: #efe9db;
+
+  --ds-brand: #4f46e5;
+  --ds-brand-strong: #4338ca;
+  --ds-brand-stronger: #3730a3;
+  --ds-brand-soft: #eceafc;
+  --ds-brand-border: #c7c2f5;
+  --ds-brand-ink: #3730a3;
+
+  --ds-shadow-xs: 0 1px 2px rgba(90, 70, 40, .08);
+  --ds-shadow-sm: 0 1px 3px rgba(90, 70, 40, .10), 0 1px 2px rgba(90, 70, 40, .06);
+  --ds-shadow-md: 0 4px 12px rgba(90, 70, 40, .10), 0 1px 3px rgba(90, 70, 40, .06);
+  --ds-shadow-lg: 0 12px 28px rgba(90, 70, 40, .12), 0 4px 10px rgba(90, 70, 40, .06);
+  --ds-shadow-xl: 0 24px 48px rgba(90, 70, 40, .16);
+  --ds-shadow-card: 0 1px 2px rgba(90, 70, 40, .06), 0 4px 14px rgba(90, 70, 40, .07);
+  --ds-shadow-hover: 0 2px 6px rgba(90, 70, 40, .07), 0 16px 34px rgba(90, 70, 40, .13);
+
+  --ds-radius: 14px;
+  --ds-radius-lg: 20px;
+  --ds-radius-xl: 26px;
+}
+
+html.dark {
+  /* Le mode sombre reste froid et lisible ; on réchauffe à peine l'encre. */
+  --ds-bg: #100f16;
+  --ds-surface: #181622;
+  --ds-surface-2: #1e1c2b;
+  --ds-surface-3: #262434;
+  --ds-text: #f3f0ea;
+  --ds-text-soft: #c7c2b8;
+  --ds-text-faint: #958f86;
+  --ds-border: #2b2836;
+  --ds-border-strong: #3c3850;
+}
+
+/* --------------------------------------------------------------------------
+   2. Typographie : titres en Krub, texte en Inter
+   -------------------------------------------------------------------------- */
+/* Titres en Inter : plus de serif. Inter a besoin d'un corps plus gras et d'un
+   interlettrage resserre pour affirmer la hiérarchie. */
+h1, h2, h3, h4,
+.page-title,
+.section-title,
+.home-title,
+.hero-title {
+  font-family: var(--ds-font-display);
+  letter-spacing: -0.015em;
+}
+
+h1, .page-title, .home-title, .hero-title {
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+}
+h2, .section-title { font-weight: 700; letter-spacing: -0.02em; }
+h3, h4 { font-weight: 600; letter-spacing: -0.01em; }
+.page-title, .home-title, .hero-title,
+.student-page .page-title, .student-page .home-title, .student-page .hero-title {
+  font-size: clamp(2.05rem, 1.5rem + 2.4vw, 3.15rem) !important;
+}
+.section-title,
+.student-page .section-title {
+  font-size: clamp(1.35rem, 1.12rem + 0.9vw, 1.85rem) !important;
+}
+
+/* --------------------------------------------------------------------------
+   3. Atmosphère
+   -------------------------------------------------------------------------- */
+body {
+  background:
+    radial-gradient(1100px 460px at 16% -120px, color-mix(in srgb, var(--ds-brand) 9%, transparent), transparent 70%),
+    radial-gradient(900px 400px at 90% -160px, color-mix(in srgb, #d97706 6%, transparent), transparent 62%),
+    var(--ds-bg) !important;
+}
+html.dark body {
+  background:
+    radial-gradient(1100px 500px at 16% -140px, color-mix(in srgb, var(--ds-brand) 14%, transparent), transparent 70%),
+    radial-gradient(900px 420px at 90% -160px, color-mix(in srgb, #22d3ee 8%, transparent), transparent 62%),
+    var(--ds-bg) !important;
+}
+
+/* --------------------------------------------------------------------------
+   3 bis. Motif de fond « pointillé » sur toutes les pages SAUF l'accueil
+   --------------------------------------------------------------------------
+   L'accueil garde un fond uni pour laisser respirer les grandes cartes de
+   niveau ; les pages interieures (niveau, chapitre, QCM, flashcards, methodes,
+   outils, administration) recoivent un semis de points discrets. Un seul
+   radial-gradient repete suffit : aucune image a telecharger.
+
+   Variantes possibles en changeant simplement la 3e couche de background-image :
+     • quadrillage : repeating-linear-gradient(to right, ...), repeating-linear-gradient(to bottom, ...)
+     • hachures    : repeating-linear-gradient(45deg, var(--ds-pattern-dot) 0 1px, transparent 1px 12px)
+     • lignes      : repeating-linear-gradient(to bottom, var(--ds-pattern-dot) 0 1px, transparent 1px 28px)
+   -------------------------------------------------------------------------- */
+:root {
+  --ds-pattern-dot: rgba(122, 100, 66, .17);
+  --ds-pattern-size: 20px;
+}
+html.dark {
+  --ds-pattern-dot: rgba(255, 255, 255, .06);
+}
+
+body.page-inner {
+  background-color: var(--ds-bg) !important;
+  background-image:
+    radial-gradient(1100px 460px at 16% -120px, color-mix(in srgb, var(--ds-brand) 9%, transparent), transparent 70%),
+    radial-gradient(900px 400px at 90% -160px, color-mix(in srgb, #d97706 6%, transparent), transparent 62%),
+    radial-gradient(circle at 1px 1px, var(--ds-pattern-dot) 1.1px, transparent 1.6px) !important;
+  background-size: auto, auto, var(--ds-pattern-size) var(--ds-pattern-size) !important;
+  background-repeat: no-repeat, no-repeat, repeat !important;
+  background-position: 0 0, 0 0, 0 0 !important;
+}
+html.dark body.page-inner {
+  background-color: var(--ds-bg) !important;
+  background-image:
+    radial-gradient(1100px 500px at 16% -140px, color-mix(in srgb, var(--ds-brand) 14%, transparent), transparent 70%),
+    radial-gradient(900px 420px at 90% -160px, color-mix(in srgb, #22d3ee 8%, transparent), transparent 62%),
+    radial-gradient(circle at 1px 1px, var(--ds-pattern-dot) 1.1px, transparent 1.6px) !important;
+  background-size: auto, auto, var(--ds-pattern-size) var(--ds-pattern-size) !important;
+  background-repeat: no-repeat, no-repeat, repeat !important;
+  background-position: 0 0, 0 0, 0 0 !important;
+}
+
+/* --------------------------------------------------------------------------
+   4. Signature des surfaces
+   -------------------------------------------------------------------------- */
+.work-global-hero,
+.chapter-page-hero,
+.exam-hero,
+.method-page-hero {
+  border-radius: var(--ds-radius-xl) !important;
+  box-shadow: var(--ds-shadow-card) !important;
+}
+
+/* Étiquettes : encre plus affirmée sur le fond crème. */
+.badge, .status-pill, .editorial-level-tag, .document-type {
+  font-weight: 700;
+}
+.chapter-number, .exam-index {
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--accent) 30%, transparent) !important;
+}
+
+/* Le pied de page garde le liseré dégradé mais sur un ton plus chaud. */
+.site-footer { background: var(--ds-surface); }
+
+/* --------------------------------------------------------------------------
+   5. Mouvement réduit
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .page-title, .section-title { font-size: 1.5rem !important; }
+}

@@ -1,0 +1,3 @@
+-- Migration V62 -> V63
+-- Aucun changement de structure obligatoire.
+-- Le formulaire admin/setup.php verifie et cree la table admins si necessaire.

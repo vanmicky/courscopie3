@@ -1,0 +1,11 @@
+# Configuration locale (identifiants de test) — ne jamais versionner.
+includes/config.local.php
+
+# Sauvegardes et exports locaux
+*.sql.gz
+*.zip
+!database/*.sql
+
+# Fichiers système
+.DS_Store
+Thumbs.db

@@ -1,0 +1,118 @@
+/* ==========================================================================
+   V102 — Projection individuelle des outils de classe
+   --------------------------------------------------------------------------
+   Chaque outil s'ouvre seul, en grand, pour le vidéoprojecteur :
+     outils.php?projeter=minuteur   (groupes, tirage, consignes, animation)
+
+   Le mode projection se reconnaît à la classe `.outils-projection` posée sur
+   <body> et à l'attribut `data-projection` qui nomme l'outil affiché.
+   ========================================================================== */
+
+/* --- Un seul panneau visible --------------------------------------------- */
+.outils-projection .outil-panel { display: none !important; }
+.outils-projection[data-projection="minuteur"]  #minuteur,
+.outils-projection[data-projection="groupes"]   #groupes,
+.outils-projection[data-projection="tirage"]    #tirage,
+.outils-projection[data-projection="consignes"] #consignes,
+.outils-projection[data-projection="animation"] #animation { display: block !important; }
+
+/* Pas de bouton « Projeter » quand on projette déjà. */
+.outils-projection .outil-project { display: none !important; }
+
+/* --- Mise à l'échelle ---------------------------------------------------- */
+.outils-projection {
+  background: var(--ds-bg);
+}
+.outils-projection .outils-page {
+  max-width: none !important;
+  width: auto !important;
+  margin: 0 !important;
+  padding: clamp(.75rem, 1.4vw, 1.6rem) clamp(1rem, 2vw, 2.5rem) clamp(1rem, 2vw, 2rem) !important;
+}
+.outils-projection .outils-page > .nav-link,
+.outils-projection .outils-hero,
+.outils-projection .outils-tabs { display: none !important; }
+
+/* --- Barre de sortie ----------------------------------------------------- */
+.projection-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: .75rem;
+  margin-bottom: .75rem;
+  padding-bottom: .6rem;
+  border-bottom: 1px solid var(--ds-border);
+}
+.projection-title {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  font-size: .95rem;
+  font-weight: 750;
+  color: var(--ds-text);
+}
+.projection-icon { width: 1.1rem; height: 1.1rem; color: var(--ds-text-soft); }
+.projection-actions { display: inline-flex; gap: .5rem; }
+.projection-fs { height: 2.35rem; padding-inline: .9rem; font-size: .82rem !important; }
+
+/* --- Contenus agrandis --------------------------------------------------- */
+.outils-projection .outil-panel { padding: 0 !important; }
+
+/* Les chiffres ont leur propre taille : on cible l'élément qui les porte. */
+.outils-projection .main-display,
+.outils-projection .chrono-display {
+  font-size: clamp(4rem, 13vw, 15rem) !important;
+  line-height: 1 !important;
+  font-variant-numeric: tabular-nums;
+}
+.outils-projection .display-caption {
+  font-size: clamp(.9rem, 1.2vw, 1.35rem) !important;
+}
+.outils-projection .timer-board { gap: clamp(.75rem, 1.5vw, 1.5rem) !important; }
+.outils-projection .timer-title h2,
+.outils-projection .section-title { font-size: clamp(1.15rem, 1.6vw, 1.6rem) !important; }
+
+.outils-projection .consigne-text {
+  font-size: clamp(1.6rem, 3.6vw, 3.4rem) !important;
+  line-height: 1.2 !important;
+}
+.outils-projection .consigne-stage { min-height: 34vh; }
+
+.outils-projection .tirage-display {
+  font-size: clamp(2rem, 4.6vw, 4.5rem) !important;
+  line-height: 1.1 !important;
+}
+.outils-projection .tirage-stage { min-height: 32vh; }
+
+.outils-projection .group-output { font-size: clamp(1rem, 1.5vw, 1.45rem) !important; }
+.outils-projection .group-card { break-inside: avoid; }
+
+.outils-projection .dice-total { font-size: clamp(2rem, 4.5vw, 4.5rem) !important; }
+.outils-projection .dice-row { gap: clamp(.5rem, 1.2vw, 1.25rem) !important; }
+
+/* Les consignes rapides restent cliquables en projection. */
+.outils-projection .signal-grid { gap: clamp(.5rem, 1vw, 1rem) !important; }
+.outils-projection .signal-btn { min-height: clamp(2.75rem, 6vh, 4rem) !important; font-size: clamp(.9rem, 1.2vw, 1.15rem) !important; }
+
+@media (max-width: 640px) {
+  .projection-bar { position: sticky; top: 0; z-index: 5; }
+}
+
+/* --- Bouton « Projeter cet outil » dans la page normale ------------------- */
+.outil-project {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  margin: 0 0 .75rem auto;
+  padding: .45rem .85rem;
+  border: 1px solid var(--ds-border-strong);
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-surface);
+  color: var(--ds-text) !important;
+  font-size: .8rem;
+  font-weight: 650;
+  text-decoration: none;
+}
+.outil-project:hover { background: var(--ds-surface-2); }
+.outil-panel > .outil-project { float: none; }

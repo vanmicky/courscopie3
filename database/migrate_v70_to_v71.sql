@@ -1,0 +1,2 @@
+-- V71 : aucune modification de la base de donnees.
+-- Cette version unifie uniquement l'interface et les composants visuels.

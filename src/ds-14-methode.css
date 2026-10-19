@@ -1,0 +1,297 @@
+/* ==========================================================================
+   V93 — Fiche « Apprendre à apprendre » : index latéral groupé
+   --------------------------------------------------------------------------
+   Constat : les douze onglets obligeaient à faire défiler une barre de pastilles
+   et ne montraient qu'une section à la fois — impossible de scanner, de
+   comparer, ni de retrouver une notion sans la chercher dans une liste
+   horizontale.
+
+   Nouveau parti pris, celui d'une documentation de référence :
+     • index latéral collant, groupé par thème (Fondations, Mémoire, En classe,
+       À la maison, Par matière…) et numéroté ;
+     • tout le contenu dans une seule colonne, sections séparées par un filet :
+       on peut défiler, scanner et utiliser la recherche du navigateur ;
+     • la section en cours est surlignée dans l'index ;
+     • sur téléphone, l'index devient un bloc repliable « Sommaire » ;
+     • en-tête compact, corps de texte plus aéré.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Ossature : index + colonne de lecture
+   -------------------------------------------------------------------------- */
+.method-detail .learn2-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--ds-space-6);
+  align-items: start;
+}
+@media (min-width: 1024px) {
+  .method-detail .learn2-layout {
+    grid-template-columns: 16rem minmax(0, 1fr);
+    gap: var(--ds-space-8);
+  }
+}
+
+/* La colonne de texte garde son panneau, avec plus d'air à l'intérieur. */
+.method-detail .learn2-layout > div:not(.learn2-sidebar) {
+  padding: clamp(1.35rem, 1.1rem + 1.4vw, 2.75rem) !important;
+}
+
+/* --------------------------------------------------------------------------
+   2. Index latéral
+   -------------------------------------------------------------------------- */
+.method-detail .learn2-sidebar {
+  padding: 0 !important;
+  border: 0 !important;
+  background: none !important;
+  box-shadow: none !important;
+  position: static !important;
+}
+@media (min-width: 1024px) {
+  .method-detail .learn2-sidebar {
+    position: sticky !important;
+    top: calc(var(--ds-header-h) + 1rem) !important;
+    max-height: calc(100dvh - var(--ds-header-h) - 2rem);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: .35rem .35rem .35rem 0 !important;
+  }
+}
+.method-detail .learn2-sidebar::-webkit-scrollbar { width: 6px; }
+.method-detail .learn2-sidebar::-webkit-scrollbar-thumb { background: var(--ds-border-strong); border-radius: 999px; }
+
+/* Le bloc repliable (téléphone) : sur ordinateur il est toujours ouvert. */
+.learn2-index {
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-lg);
+  background: var(--ds-surface);
+  box-shadow: var(--ds-shadow-card);
+  padding: .5rem;
+}
+@media (min-width: 1024px) {
+  .learn2-index {
+    border: 0;
+    background: none;
+    box-shadow: none;
+    padding: 0;
+  }
+}
+.learn2-index-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-space-3);
+  padding: .6rem .75rem;
+  border-radius: var(--ds-radius-sm);
+  font-size: .9rem;
+  font-weight: 700;
+  color: var(--ds-text);
+  cursor: pointer;
+  list-style: none;
+}
+.learn2-index-summary::-webkit-details-marker { display: none; }
+.learn2-index-summary::after {
+  content: "";
+  width: .5rem;
+  height: .5rem;
+  margin-left: auto;
+  border-right: 2px solid var(--ds-text-faint);
+  border-bottom: 2px solid var(--ds-text-faint);
+  transform: rotate(45deg);
+  transition: transform var(--ds-motion-fast) var(--ds-ease);
+}
+.learn2-index[open] > .learn2-index-summary::after { transform: rotate(-135deg); }
+.learn2-index-count { color: var(--ds-text-faint); font-size: .78rem; font-weight: 600; }
+@media (min-width: 1024px) {
+  .learn2-index-summary { display: none; }
+}
+
+/* Groupes et liens */
+.method-detail .learn2-nav { display: grid; gap: 1.1rem; margin-top: .4rem; }
+@media (min-width: 1024px) { .method-detail .learn2-nav { margin-top: 0; } }
+
+.learn2-index-group { display: grid; gap: .1rem; }
+.learn2-index-label {
+  margin: 0 0 .3rem .55rem;
+  font-size: .66rem;
+  font-weight: 750;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ds-text-faint);
+}
+
+.method-detail .learn2-nav a {
+  display: grid;
+  grid-template-columns: 1.6rem minmax(0, 1fr);
+  align-items: baseline;
+  gap: .35rem;
+  min-height: 0;
+  padding: .42rem .55rem;
+  border: 0;
+  border-radius: var(--ds-radius-sm);
+  background: none;
+  color: var(--ds-text-soft) !important;
+  font-size: .861rem;
+  font-weight: 600;
+  line-height: 1.35;
+  text-decoration: none;
+  transition: none;
+}
+.method-detail .learn2-nav a:hover {
+  background: var(--ds-surface-2) !important;
+  color: var(--ds-text) !important;
+}
+.learn2-index-num {
+  font-variant-numeric: tabular-nums;
+  font-size: .7rem;
+  font-weight: 700;
+  color: var(--ds-text-faint);
+}
+/* Les couleurs sont posées sur les SPANS du sommaire, pas sur le lien : la
+   couleur du lien est disputée par plusieurs couches, et l'héritage ne suffit
+   pas à garantir le contraste en thème sombre. Les spans ne sont ciblés que
+   par cette règle : le résultat est déterminé. */
+.method-detail .learn2-index-text { color: #3f3f46 !important; }
+.method-detail .learn2-index-num { color: #71717a !important; }
+.method-detail .learn2-nav a.is-active .learn2-index-text,
+.method-detail .learn2-nav a.is-active .learn2-index-num { color: #1d3a86 !important; }
+
+html.dark .method-detail .learn2-index-text { color: #c6c6cc !important; }
+html.dark .method-detail .learn2-index-num { color: #9a9aa2 !important; }
+html.dark .method-detail .learn2-nav a.is-active .learn2-index-text,
+html.dark .method-detail .learn2-nav a.is-active .learn2-index-num { color: #bcd0ff !important; }
+
+/* Surlignage de la section en cours. La règle porte `body` : une couche
+   antérieure impose un fond clair avec une spécificité (0,4,2) qui battait la
+   version simple. */
+body .method-detail .learn2-nav a.is-active { background: #eaf0fe !important; }
+html.dark body .method-detail .learn2-nav a.is-active { background: #1b2438 !important; }
+html.dark body .method-detail .learn2-nav a:hover { background: #1f1f23 !important; }
+
+/* --------------------------------------------------------------------------
+   3. En-tête de la fiche, compact
+   -------------------------------------------------------------------------- */
+.method-detail .learn2-hero {
+  /* Même marge interne que le panneau de lecture : les deux blocs partagent
+     ainsi exactement le même axe vertical. */
+  padding: clamp(1.35rem, 1.1rem + 1.4vw, 2.75rem) !important;
+  margin-bottom: var(--ds-space-5) !important;
+}
+.method-detail .learn2-hero .page-title,
+.method-detail .learn2-hero h1 {
+  font-size: clamp(1.55rem, 1.2rem + 1.4vw, 2.1rem) !important;
+  line-height: 1.12 !important;
+  letter-spacing: -.025em !important;
+  margin: .3rem 0 .5rem !important;
+}
+.method-detail .learn2-hero p { max-width: 62ch; }
+.method-detail .learn2-hero .learn2-rule-card {
+  margin-top: var(--ds-space-4) !important;
+  padding: var(--ds-space-3) var(--ds-space-4) !important;
+  font-size: .95rem !important;
+  border-left-width: 4px !important;
+}
+.method-detail .learn2-source-badge { margin-top: .5rem !important; }
+.method-detail .learn2-reading-guide { margin-bottom: var(--ds-space-5) !important; padding: .7rem .9rem !important; }
+
+/* --------------------------------------------------------------------------
+   4. Sections et corps de texte
+   -------------------------------------------------------------------------- */
+.method-detail .learn2-section + .learn2-section {
+  margin-top: var(--ds-space-10) !important;
+  padding-top: var(--ds-space-8) !important;
+  border-top: 1px solid var(--ds-border) !important;
+}
+.method-detail .learn2-section { scroll-margin-top: calc(var(--ds-header-h) + 1.5rem); }
+
+.method-detail .learn2-section-head { gap: var(--ds-space-3) !important; margin-bottom: var(--ds-space-5) !important; }
+.method-detail .learn2-icon { width: 2.3rem !important; height: 2.3rem !important; font-size: 1.1rem !important; }
+.method-detail .learn2-title {
+  font-size: clamp(1.3rem, 1.05rem + 1vw, 1.65rem) !important;
+  line-height: 1.2 !important;
+}
+.method-detail .learn2-summary { font-size: .95rem !important; margin-top: .3rem !important; }
+
+.method-detail .learn2-card h3 {
+  font-size: 1.06rem !important;
+  margin-bottom: var(--ds-space-2) !important;
+  padding-top: var(--ds-space-2);
+}
+.method-detail .learn2-card p,
+.method-detail .learn2-card li {
+  font-size: .96rem !important;
+  line-height: 1.72 !important;
+}
+.method-detail .learn2-grid > * + * { margin-top: var(--ds-space-8) !important; }
+.method-detail .learn2-grid > * + *::before {
+  width: 2.5rem !important;
+  height: 2px !important;
+  margin-bottom: var(--ds-space-4) !important;
+  opacity: .55;
+}
+
+/* Encadrés : un peu plus compacts. */
+.method-detail .learn-principle,
+.method-detail .learn-check,
+.method-detail .learn-quote,
+.method-detail .learn-warning,
+.method-detail .learn-do,
+.method-detail .learn-dont,
+.method-detail .memory-box,
+.method-detail .concentration-card {
+  padding: var(--ds-space-3) var(--ds-space-4) !important;
+  font-size: .92rem !important;
+}
+
+@media (max-width: 640px) {
+  .method-detail .learn2-section + .learn2-section {
+    margin-top: var(--ds-space-8) !important;
+    padding-top: var(--ds-space-6) !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   6. Colonne de lecture bornée et alignée
+   --------------------------------------------------------------------------
+   Le texte était collé à gauche du panneau (614 px de texte dans 819 px), avec
+   un grand vide à droite, et le héros (1184 px) n'utilisait que 626 px.
+
+   Plutôt que de centrer chaque bloc (ce qui désalignait héros et contenu), on
+   borne le héros ET le panneau de lecture à la même largeur, posés sur la même
+   origine : l'alignement est exact par construction, et le vide disparaît.
+   -------------------------------------------------------------------------- */
+.method-detail .learn2-section { max-width: none; margin-inline: 0; }
+
+@media (min-width: 1024px) {
+  .method-detail .learn2-hero,
+  .method-detail .learn2-reading-guide,
+  .method-detail .learn2-layout > div:not(.learn2-sidebar) {
+    max-width: 46rem !important;   /* 736 px ≈ 69 caractères */
+  }
+  .method-detail .learn2-hero,
+  .method-detail .learn2-reading-guide {
+    margin-left: calc(16rem + var(--ds-space-8)) !important;
+  }
+}
+
+/* Les paragraphes remplissent la mesure : plus de plafond plus étroit qui
+   créait un second vide à l'intérieur du bloc. */
+.method-detail .learn2-hero p,
+.method-detail .learn2-card p,
+.method-detail .learn2-card li,
+.method-detail .learn2-list,
+.method-detail .learn2-summary { max-width: none !important; }
+
+/* Les encadrés gardent une mesure lisible mais suivent le bloc. */
+.method-detail .learn-principle,
+.method-detail .learn-check,
+.method-detail .learn-quote,
+.method-detail .learn-warning,
+.method-detail .learn-do,
+.method-detail .learn-dont,
+.method-detail .memory-box,
+.method-detail .concentration-card { max-width: 100% !important; }
+
+/* Sous-titres : un peu d'air au-dessus, sans casser le rythme. */
+.method-detail .learn2-card h3 { margin-top: var(--ds-space-4) !important; }
+.method-detail .learn2-card:first-child h3:first-child { margin-top: 0 !important; }

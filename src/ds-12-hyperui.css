@@ -1,0 +1,214 @@
+/* ==========================================================================
+   V89 — Composants « façon HyperUI »
+   --------------------------------------------------------------------------
+   HyperUI (composants Tailwind) est réputé pour son esthétique minimale et
+   monochrome : boutons pleins quasi noirs, cartes blanches à bordure grise
+   fine et ombre très légère, rayons resserrés, pastilles grises, anneaux de
+   focus discrets. On reproduit fidèlement ce langage avec les jetons du design
+   system, sans introduire Tailwind ni étape de build.
+
+   Base : noir et blanc (ds-9-mono.css), avec pour seul accent les couleurs de
+   matières, légèrement désaturées.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Rayons resserrés (échelle HyperUI : md 8, lg 12, xl 16)
+   -------------------------------------------------------------------------- */
+:root {
+  --ds-radius-xs: 6px;
+  --ds-radius-sm: 8px;
+  --ds-radius: 10px;
+  --ds-radius-lg: 14px;
+  --ds-radius-xl: 16px;
+  --ds-shadow-card: 0 1px 2px rgba(0, 0, 0, .04);
+  --ds-shadow-hover: 0 4px 12px rgba(0, 0, 0, .08);
+}
+
+/* --------------------------------------------------------------------------
+   2. Boutons : pleins et mats
+   -------------------------------------------------------------------------- */
+.btn-primary {
+  background: #18181b !important;
+  background-image: none !important;
+  color: #ffffff !important;
+  border: 1px solid #18181b !important;
+  border-radius: var(--ds-radius-sm) !important;
+  box-shadow: none !important;
+  font-weight: 600;
+  font-size: .875rem;
+}
+.btn-primary:hover { background: #3f3f46 !important; border-color: #3f3f46 !important; }
+.btn-primary:focus-visible {
+  outline: 2px solid #18181b;
+  outline-offset: 2px;
+  box-shadow: none !important;
+}
+
+.btn-secondary,
+.btn-ghost {
+  background: #ffffff !important;
+  background-image: none !important;
+  color: #3f3f46 !important;
+  border: 1px solid #d4d4d8 !important;
+  border-radius: var(--ds-radius-sm) !important;
+  box-shadow: none !important;
+  font-weight: 600;
+  font-size: .875rem;
+}
+.btn-secondary:hover,
+.btn-ghost:hover { background: #f4f4f5 !important; border-color: #a1a1aa !important; color: #18181b !important; }
+
+html.dark .btn-primary { background: #fafafa !important; color: #18181b !important; border-color: #fafafa !important; }
+html.dark .btn-primary:hover { background: #d4d4d8 !important; border-color: #d4d4d8 !important; }
+html.dark .btn-secondary,
+html.dark .btn-ghost { background: #1c1c1f !important; color: #f4f4f5 !important; border-color: #3f3f46 !important; }
+html.dark .btn-secondary:hover,
+html.dark .btn-ghost:hover { background: #26262a !important; color: #ffffff !important; }
+
+/* --------------------------------------------------------------------------
+   3. Cartes : blanches, bordure nette, ombre discrète
+   -------------------------------------------------------------------------- */
+.card,
+.chapter-tile,
+.level-card,
+.method-card,
+.document-resource-card,
+.chapter-activity-card,
+.chapter-video-card,
+.exercise-prep-card,
+.skill-group,
+.qcm-question-card,
+.flashcard-study-shell,
+.timer-card,
+.outil-card,
+.group-card {
+  background: #ffffff !important;
+  background-image: none !important;
+  border: 1px solid #e4e4e7 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .04) !important;
+}
+/* La carte de niveau est pilotée par `.editorial-home .level-card` (couche
+   historique, spécificité 0,2,0) : on la reprend pour un fond plat et un rayon
+   identique aux autres cartes. */
+.editorial-home .level-card {
+  background: #ffffff !important;
+  background-image: none !important;
+  border-radius: 12px !important;
+}
+html.dark .editorial-home .level-card { background: #17171a !important; }
+
+html.dark .card,
+html.dark .chapter-tile,
+html.dark .level-card,
+html.dark .method-card,
+html.dark .document-resource-card,
+html.dark .chapter-activity-card,
+html.dark .chapter-video-card,
+html.dark .exercise-prep-card,
+html.dark .skill-group,
+html.dark .qcm-question-card,
+html.dark .flashcard-study-shell,
+html.dark .timer-card,
+html.dark .outil-card,
+html.dark .group-card {
+  background: #17171a !important;
+  border-color: #27272b !important;
+  box-shadow: none !important;
+}
+
+/* Les héros : un panneau clair, plus discret. */
+.work-global-hero,
+.chapter-page-hero,
+.exam-hero,
+.method-page-hero,
+.home-hero,
+.level-hero,
+.methods-hero,
+.outils-hero,
+.learn2-hero {
+  background: #ffffff !important;
+  background-image: none !important;
+  border: 1px solid #e4e4e7 !important;
+  border-radius: var(--ds-radius-xl) !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .04) !important;
+}
+html.dark .work-global-hero,
+html.dark .chapter-page-hero,
+html.dark .exam-hero,
+html.dark .method-page-hero,
+html.dark .home-hero,
+html.dark .level-hero,
+html.dark .methods-hero,
+html.dark .outils-hero,
+html.dark .learn2-hero {
+  background: #17171a !important;
+  border-color: #27272b !important;
+  box-shadow: none !important;
+}
+
+/* Le panneau de lecture de la fiche méthode reste un « papier » blanc net. */
+.method-detail .learn2-hero,
+.method-detail .learn2-layout > div:not(.learn2-sidebar) {
+  background: #ffffff !important;
+  background-image: none !important;
+  border: 1px solid #e4e4e7 !important;
+  border-radius: var(--ds-radius-lg) !important;
+}
+html.dark .method-detail .learn2-hero,
+html.dark .method-detail .learn2-layout > div:not(.learn2-sidebar) {
+  background: #17171a !important;
+  border-color: #27272b !important;
+}
+
+/* --------------------------------------------------------------------------
+   4. Champs et pastilles
+   -------------------------------------------------------------------------- */
+input, select, textarea,
+.outil-input, .outil-textarea {
+  border-radius: var(--ds-radius-sm) !important;
+  border-color: #d4d4d8 !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+}
+input:focus-visible, select:focus-visible, textarea:focus-visible,
+.outil-input:focus-visible, .outil-textarea:focus-visible {
+  border-color: #18181b !important;
+  box-shadow: 0 0 0 3px rgba(24, 24, 27, .08) !important;
+  outline: none !important;
+}
+html.dark input, html.dark select, html.dark textarea,
+html.dark .outil-input, html.dark .outil-textarea {
+  background-color: #1c1c1f !important;
+  border-color: #3f3f46 !important;
+}
+html.dark input:focus-visible, html.dark select:focus-visible, html.dark textarea:focus-visible,
+html.dark .outil-input:focus-visible, html.dark .outil-textarea:focus-visible {
+  border-color: #fafafa !important;
+  box-shadow: 0 0 0 3px rgba(250, 250, 250, .12) !important;
+}
+
+/* Pastilles et étiquettes grises. */
+.badge {
+  background: #f4f4f5 !important;
+  color: #3f3f46 !important;
+  border: 1px solid #e4e4e7 !important;
+  box-shadow: none !important;
+}
+html.dark .badge { background: #1c1c1f !important; color: #d4d4d8 !important; border-color: #27272b !important; }
+
+/* --------------------------------------------------------------------------
+   5. L'accent de matière : discret
+   --------------------------------------------------------------------------
+   HyperUI garde au plus une couleur. Les marqueurs de matière (pastille du
+   menu, pill active, numéro de chapitre) restent colorés mais sont désaturés
+   pour se fondre dans le noir et blanc.
+   -------------------------------------------------------------------------- */
+.nav-dot { box-shadow: none; }
+/* Le numéro de chapitre et l'indice d'examen gardent leur texte blanc sur fond
+   d'accent : forcer une couleur ici les rendait illisibles. */
+.chapter-number, .exam-index { box-shadow: none !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-primary, .btn-secondary, .btn-ghost { transition: none; }
+}

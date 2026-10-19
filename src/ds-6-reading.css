@@ -1,0 +1,559 @@
+/* ==========================================================================
+   V79 — Lecture longue : refonte de la fiche « Apprendre à apprendre »
+   --------------------------------------------------------------------------
+   Problème constaté : le contenu (12 sections, 72 cartes) était rendu en
+   grilles de 2 à 3 colonnes, chaque carte étant une boîte bordée sur fond
+   gris. Résultat : des colonnes étroites, 70 blocs qui se concurrencent, et
+   aucune continuité de lecture.
+
+   Parti pris : un document éditorial.
+     • une seule colonne de texte, mesure limitée à ~70 caractères ;
+     • plus de boîtes : les cartes deviennent des sous-sections séparées par
+       du blanc et un filet ;
+     • sommaires collants avec repère de lecture ;
+     • encadrés unifiés (règle, attention, à faire, à éviter, mémoire…).
+   Tout est porté par `.method-detail`, donc limité aux fiches méthodes.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Ossature : sidebar + colonne de lecture
+   -------------------------------------------------------------------------- */
+.method-detail .learn2-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--ds-space-8);
+  align-items: start;
+}
+@media (min-width: 1100px) {
+  .method-detail .learn2-layout {
+    grid-template-columns: 16.5rem minmax(0, 1fr);
+    gap: var(--ds-space-12);
+  }
+}
+
+/* Toutes les grilles de contenu passent en colonne unique. */
+.method-detail .learn2-grid,
+.method-detail .learn2-grid.two,
+.method-detail .learn2-grid.three {
+  display: block !important;
+}
+.method-detail .learn2-grid > * + * { margin-top: var(--ds-space-8); }
+
+/* Mesure de lecture confortable. */
+.method-detail .learn2-section p,
+.method-detail .learn2-section li,
+.method-detail .learn2-card p,
+.method-detail .learn2-card li,
+.method-detail .learn2-list,
+.method-detail .learn2-summary,
+.method-detail .learn2-reading-guide p {
+  max-width: 70ch;
+}
+
+/* --------------------------------------------------------------------------
+   2. Sections : de la carte au chapitre de document
+   -------------------------------------------------------------------------- */
+.method-detail .learn2-section {
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  scroll-margin-top: 6.5rem;
+}
+.method-detail .learn2-section + .learn2-section {
+  margin-top: var(--ds-space-12);
+  padding-top: var(--ds-space-12) !important;
+  border-top: 1px solid var(--ds-border) !important;
+}
+
+.method-detail .learn2-section-head {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--ds-space-4);
+  margin-bottom: var(--ds-space-6);
+}
+.method-detail .learn2-icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: var(--ds-radius);
+  font-size: 1.3rem;
+  line-height: 1;
+}
+.method-detail .learn2-kicker {
+  display: inline-block;
+  margin-bottom: .35rem;
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+}
+.method-detail .learn2-title {
+  margin: 0;
+  font-family: var(--ds-font-display);
+  font-size: clamp(1.6rem, 1.25rem + 1.2vw, 2.1rem) !important;
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -.015em;
+}
+.method-detail .learn2-summary {
+  margin: var(--ds-space-3) 0 0;
+  color: var(--ds-text-soft);
+  font-size: 1.02rem;
+  line-height: 1.7;
+}
+
+/* --------------------------------------------------------------------------
+   3. Cartes : deviennent des sous-sections sans cadre
+   -------------------------------------------------------------------------- */
+.method-detail .learn2-card,
+.method-detail .learn-card {
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+.method-detail .learn2-card h3 {
+  display: block;
+  margin: 0 0 var(--ds-space-3);
+  font-family: var(--ds-font-display);
+  font-size: 1.22rem;
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: -.01em;
+  color: var(--ds-text);
+}
+.method-detail .learn2-card h3 + p,
+.method-detail .learn2-card > p:first-of-type { margin-top: 0; }
+.method-detail .learn2-card p,
+.method-detail .learn2-card li {
+  color: var(--ds-text-soft);
+  font-size: 1rem;
+  line-height: 1.78;
+}
+.method-detail .learn2-card p + p { margin-top: var(--ds-space-4); }
+
+.method-detail .learn2-list {
+  margin: var(--ds-space-4) 0 0;
+  padding-left: 1.15rem;
+}
+.method-detail .learn2-list li { margin-block: .45rem; }
+
+/* --------------------------------------------------------------------------
+   4. Sommaire
+   -------------------------------------------------------------------------- */
+.method-detail .learn2-sidebar {
+  border: 1px solid var(--ds-border) !important;
+  border-radius: var(--ds-radius-lg) !important;
+  background: var(--ds-surface) !important;
+  box-shadow: var(--ds-shadow-card) !important;
+  padding: var(--ds-space-4) !important;
+}
+.method-detail .learn2-sidebar-title {
+  display: block;
+  margin-bottom: var(--ds-space-3);
+  color: var(--ds-text-faint) !important;
+  font-size: .72rem !important;
+  font-weight: 750 !important;
+  letter-spacing: .09em !important;
+  text-transform: uppercase;
+}
+.method-detail .learn2-nav { display: grid; gap: .15rem; }
+.method-detail .learn2-nav a {
+  min-height: 2.4rem;
+  padding: .45rem .6rem;
+  border-radius: var(--ds-radius-sm);
+  color: var(--ds-text-soft) !important;
+  font-size: .9rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+.method-detail .learn2-nav a:hover { background: var(--ds-surface-2) !important; color: var(--ds-text) !important; }
+.method-detail .learn2-nav a.is-active {
+  background: var(--accent-soft, var(--ds-brand-soft)) !important;
+  color: var(--accent-ink, var(--ds-brand-ink)) !important;
+  font-weight: 700;
+}
+
+/* Sur mobile : bandeau horizontal de pastilles plutot qu'une longue liste. */
+@media (max-width: 1099px) {
+  .method-detail .learn2-sidebar {
+    position: static !important;
+    padding: var(--ds-space-3) !important;
+  }
+  .method-detail .learn2-nav { display: flex; gap: var(--ds-space-2); overflow-x: auto; padding-bottom: .25rem; }
+  .method-detail .learn2-nav a {
+    flex: none;
+    border: 1px solid var(--ds-border);
+    border-radius: var(--ds-radius-pill);
+    background: var(--ds-surface-2);
+    white-space: nowrap;
+  }
+}
+@media (min-width: 1100px) {
+  .method-detail .learn2-sidebar { position: sticky; top: 5.5rem; }
+}
+
+/* --------------------------------------------------------------------------
+   5. Encadrés : une seule famille visuelle
+   -------------------------------------------------------------------------- */
+.method-detail .learn-principle,
+.method-detail .learn-check,
+.method-detail .learn-quote,
+.method-detail .learn-warning,
+.method-detail .learn-do,
+.method-detail .learn-dont,
+.method-detail .memory-box,
+.method-detail .concentration-card,
+.method-detail .learn2-rule-card,
+.method-detail .learn2-reading-guide {
+  max-width: 70ch;
+  margin: var(--ds-space-5) 0 0;
+  padding: var(--ds-space-4) var(--ds-space-5);
+  border: 0 !important;
+  border-left: 4px solid var(--accent, var(--ds-brand)) !important;
+  border-radius: 0 var(--ds-radius-sm) var(--ds-radius-sm) 0 !important;
+  background: var(--ds-surface-2) !important;
+  color: var(--ds-text) !important;
+  box-shadow: none !important;
+  font-size: .95rem;
+  line-height: 1.7;
+}
+.method-detail .learn-principle > *:first-child,
+.method-detail .learn-check > *:first-child,
+.method-detail .learn-quote > *:first-child,
+.method-detail .learn-warning > *:first-child,
+.method-detail .learn-do > *:first-child,
+.method-detail .learn-dont > *:first-child,
+.method-detail .memory-box > *:first-child,
+.method-detail .concentration-card > *:first-child { margin-top: 0; }
+.method-detail .learn-principle > *:last-child,
+.method-detail .learn-check > *:last-child,
+.method-detail .learn-quote > *:last-child,
+.method-detail .learn-warning > *:last-child,
+.method-detail .learn-do > *:last-child,
+.method-detail .learn-dont > *:last-child,
+.method-detail .memory-box > *:last-child,
+.method-detail .concentration-card > *:last-child { margin-bottom: 0; }
+
+.method-detail .learn-principle .num {
+  display: inline-grid;
+  place-items: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  margin-bottom: .4rem;
+  border-radius: var(--ds-radius-pill);
+  background: var(--accent-deep, var(--ds-brand-strong));
+  color: #fff;
+  font-size: .78rem;
+  font-weight: 800;
+}
+.method-detail .learn-principle p { color: var(--ds-text) !important; }
+
+/* Nuances sémantiques : à faire / à éviter / attention. */
+.method-detail .learn-do { border-left-color: var(--ds-success) !important; background: var(--ds-success-soft) !important; }
+.method-detail .learn-dont { border-left-color: var(--ds-danger) !important; background: var(--ds-danger-soft) !important; }
+.method-detail .learn-warning { border-left-color: var(--ds-warning) !important; background: var(--ds-warning-soft) !important; }
+.method-detail .learn-do h3, .method-detail .learn-dont h3, .method-detail .learn-warning h3 {
+  margin: 0 0 .4rem;
+  font-family: var(--ds-font-ui, inherit);
+  font-size: .95rem;
+  font-weight: 750;
+  letter-spacing: 0;
+}
+.method-detail .learn-quote {
+  border-left-color: var(--ds-info) !important;
+  background: var(--ds-info-soft) !important;
+  font-family: var(--ds-font-display);
+  font-size: 1.05rem;
+  font-style: normal;
+}
+
+/* La regle d'or du haut : encadre encre, comme une citation.
+   Attention : la couche historique force un texte clair sur cet element
+   (l'encadre etait sombre a l'origine). On garde donc un fond sombre et on
+   fixe explicitement les couleurs de texte, dans les deux themes. */
+.method-detail .learn2-rule-card {
+  margin-top: var(--ds-space-6);
+  border-left-width: 5px !important;
+  border-left-color: var(--accent, var(--ds-brand)) !important;
+  background: #171526 !important;
+  color: #e9e7f2 !important;
+  font-family: var(--ds-font-display);
+  font-size: 1.08rem;
+  line-height: 1.62;
+}
+.method-detail .learn2-rule-card p,
+.method-detail .learn2-rule-card span,
+.method-detail .learn2-rule-card li { color: #e9e7f2 !important; }
+.method-detail .learn2-rule-card strong { color: #c7d2fe !important; }
+
+/* --------------------------------------------------------------------------
+   6. Chronologie (J0 · J1 · J3 · J7)
+   -------------------------------------------------------------------------- */
+.method-detail .learn-timeline {
+  max-width: 70ch;
+  margin: var(--ds-space-5) 0 0;
+  padding-left: var(--ds-space-6);
+  border-left: 2px solid var(--ds-border);
+  display: grid;
+  gap: var(--ds-space-5);
+}
+.method-detail .learn-timeline-item {
+  position: relative;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+.method-detail .learn-timeline-item::before {
+  content: "";
+  position: absolute;
+  left: calc(-1 * var(--ds-space-6) - 6px);
+  top: .45rem;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent, var(--ds-brand));
+  box-shadow: 0 0 0 4px var(--ds-surface);
+}
+.method-detail .learn-date {
+  display: inline-flex;
+  margin-bottom: .3rem;
+  padding: .18rem .6rem;
+  border-radius: var(--ds-radius-pill);
+  background: var(--accent-soft, var(--ds-brand-soft));
+  color: var(--accent-ink, var(--ds-brand-ink));
+  font-size: .78rem;
+  font-weight: 750;
+}
+
+/* --------------------------------------------------------------------------
+   7. En-tête de la fiche
+   -------------------------------------------------------------------------- */
+/* Le bloc de titre est neutralise ici ; son habillage (surface, bord, ombre) est
+   pose plus bas, dans « Fond de lecture ». */
+.method-detail .learn2-hero-grid { display: block !important; }
+.method-detail .learn2-source-badge {
+  display: inline-flex;
+  margin-top: var(--ds-space-3);
+  padding: .25rem .65rem;
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-pill);
+  background: var(--ds-surface-2);
+  color: var(--ds-text-faint);
+  font-size: .75rem;
+  font-weight: 650;
+}
+.method-detail .learn2-reading-guide {
+  border-left-color: var(--ds-brand) !important;
+  background: var(--ds-brand-soft) !important;
+}
+.method-detail .learn2-reading-guide strong { display: block; margin-bottom: .3rem; }
+
+/* --------------------------------------------------------------------------
+   8. Confort de lecture
+   -------------------------------------------------------------------------- */
+.method-detail .learn2-section { font-size: 1rem; }
+.method-detail .learn2-card > h3:first-child { margin-top: 0; }
+.method-detail section + .learn2-section > .learn2-section-head { margin-top: 0; }
+
+@media (max-width: 640px) {
+  .method-detail .learn2-section + .learn2-section { margin-top: var(--ds-space-10); padding-top: var(--ds-space-10) !important; }
+  .method-detail .learn2-card h3 { font-size: 1.12rem; }
+  .method-detail .learn2-icon { width: 2.4rem; height: 2.4rem; font-size: 1.1rem; }
+}
+
+/* --------------------------------------------------------------------------
+   9. Barre de progression, méta et retour en haut
+   -------------------------------------------------------------------------- */
+.reading-progress {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 200;
+  height: 3px;
+  background: transparent;
+  pointer-events: none;
+}
+.reading-progress > span {
+  display: block;
+  width: 0;
+  height: 100%;
+  background: var(--ds-grad-brand);
+  transition: width 90ms linear;
+}
+.method-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ds-space-2);
+  margin-bottom: 0;
+  color: var(--ds-text-faint);
+  font-size: .8125rem;
+  font-weight: 650;
+}
+.reading-foot { margin-top: var(--ds-space-10); text-align: center; }
+
+@media (prefers-reduced-motion: reduce) {
+  .reading-progress > span { transition: none; }
+}
+
+/* --------------------------------------------------------------------------
+   10. Titres d'accent des fiches courtes en mode sombre
+   --------------------------------------------------------------------------
+   La couche de rattrapage de contraste (V75) assombrit ces titres pour le
+   theme clair ; en theme sombre il faut l'inverse, sinon encre foncee sur
+   fond fonce. */
+html.dark .method-detail .pedago-section-title,
+html.dark .method-detail .chapter-theme,
+html.dark .method-detail .choice-button {
+  color: color-mix(in srgb, var(--method-accent, var(--accent, var(--ds-brand))) 45%, #ffffff) !important;
+}
+html.dark .method-detail .method-step strong,
+html.dark .method-detail .pedago-section-title strong { color: var(--ds-text) !important; }
+
+/* --------------------------------------------------------------------------
+   11. FOND DE LECTURE
+   --------------------------------------------------------------------------
+   Le texte reposait directement sur le fond de page (creme + semis de points) :
+   le motif passait derriere les lignes et genait la lecture. On pose desormais
+   le contenu sur une surface pleine, avec de l'air autour.
+
+   Le premier bloc (titre + resume) et la colonne de lecture sont deux panneaux ;
+   le sommaire garde sa propre carte.
+   -------------------------------------------------------------------------- */
+/* Les couches historiques forcent un rayon de 0,65 rem sur .learn2-hero : on
+   reprend la main avec !important pour que le panneau soit homogene. */
+.method-detail .learn2-hero,
+.method-detail .learn2-layout > div:not(.learn2-sidebar) {
+  padding: clamp(1.25rem, 1rem + 1.6vw, 2.75rem) !important;
+  border: 1px solid var(--ds-border) !important;
+  border-radius: var(--ds-radius-lg) !important;
+  background: var(--ds-surface) !important;
+  box-shadow: var(--ds-shadow-card) !important;
+}
+.method-detail .learn2-hero { margin-bottom: var(--ds-space-6); }
+.method-detail .learn2-layout > div:not(.learn2-sidebar) { position: relative; }
+
+/* Respiration du texte : paragraphes plus espaces et coupures de ligne soignees. */
+.method-detail .learn2-card p,
+.method-detail .learn2-section p,
+.method-detail .learn2-summary,
+.method-detail .learn2-reading-guide p {
+  text-wrap: pretty;
+}
+.method-detail .learn2-card p + p,
+.method-detail .learn2-section p + p { margin-top: var(--ds-space-5); }
+.method-detail .learn2-card > p:first-child { margin-top: 0; }
+.method-detail .learn2-card { margin-bottom: var(--ds-space-2); }
+.method-detail .learn2-grid > * + * { margin-top: var(--ds-space-10); }
+
+/* Un filet tres leger separe les sous-sections, sans remettre des boites. */
+.method-detail .learn2-grid > * + *::before {
+  content: "";
+  display: block;
+  width: 3.5rem;
+  height: 3px;
+  margin-bottom: var(--ds-space-6);
+  border-radius: var(--ds-radius-pill);
+  background: color-mix(in srgb, var(--accent, var(--ds-brand)) 45%, transparent);
+}
+
+@media (max-width: 640px) {
+  .method-detail .learn2-hero,
+  .method-detail .learn2-layout > div:not(.learn2-sidebar) {
+    padding: var(--ds-space-5);
+    border-radius: var(--ds-radius);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   12. Mode onglets de la fiche longue
+   --------------------------------------------------------------------------
+   Le guide fait douze sections : en lecture continue, il faut faire defiler
+   longtemps pour retrouver « Reviser les maths » ou « Sommeil ». Quand
+   JavaScript est disponible, le sommaire devient une barre de pastilles
+   collante et une seule section est affichee. Le bouton « Tout afficher »
+   redonne la lecture continue, et l'impression montre toujours tout.
+   -------------------------------------------------------------------------- */
+.method-detail.is-tabbed .learn2-layout { grid-template-columns: minmax(0, 1fr) !important; }
+
+.method-detail.is-tabbed .learn2-sidebar {
+  position: sticky !important;
+  top: calc(var(--ds-header-h) + .5rem);
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-2);
+  padding: var(--ds-space-2) !important;
+  border-radius: var(--ds-radius-pill) !important;
+  background: color-mix(in srgb, var(--ds-surface) 94%, transparent) !important;
+  backdrop-filter: saturate(1.4) blur(12px);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.method-detail.is-tabbed .learn2-sidebar::-webkit-scrollbar { display: none; }
+.method-detail.is-tabbed .learn2-sidebar-title { display: none; }
+
+.method-detail.is-tabbed .learn2-nav {
+  display: flex;
+  flex: 1 1 auto;
+  gap: var(--ds-space-2);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.method-detail.is-tabbed .learn2-nav::-webkit-scrollbar { display: none; }
+
+.method-detail.is-tabbed .learn2-nav a {
+  flex: 0 0 auto;
+  min-height: 2.35rem;
+  padding: .4rem .8rem;
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-pill) !important;
+  background: var(--ds-surface-2);
+  font-size: .86rem;
+  white-space: nowrap;
+}
+.method-detail.is-tabbed .learn2-nav a.is-active {
+  border-color: transparent;
+  background: var(--accent-deep, var(--ds-brand-strong)) !important;
+  color: #fff !important;
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--accent, var(--ds-brand)) 30%, transparent);
+}
+
+.method-detail .learn2-toggle {
+  flex: 0 0 auto;
+  min-height: 2.35rem;
+  padding: .4rem .9rem;
+  border: 1px dashed var(--ds-border-strong);
+  border-radius: var(--ds-radius-pill);
+  background: transparent;
+  color: var(--ds-text-soft);
+  font: inherit;
+  font-size: .82rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.method-detail .learn2-toggle:hover { background: var(--ds-surface-2); color: var(--ds-text); }
+
+/* En mode onglets, le panneau de lecture ne contient qu'une section : on resserre. */
+.method-detail.is-tabbed .learn2-layout > div:not(.learn2-sidebar) { padding-top: clamp(1.25rem, 1rem + 1.4vw, 2.25rem) !important; }
+.method-detail.is-tabbed .learn2-section + .learn2-section { margin-top: 0; padding-top: 0 !important; border-top: 0 !important; }
+
+@media (max-width: 700px) {
+  .method-detail.is-tabbed .learn2-sidebar { margin-inline: calc(-1 * var(--ds-space-4)); border-radius: 0 !important; border-inline: 0; }
+}
+
+/* Impression : on imprime toute la fiche, pas seulement l'onglet ouvert. */
+@media print {
+  .method-detail .learn2-toggle,
+  .method-detail .learn2-sidebar { display: none !important; }
+  .method-detail.is-tabbed .learn2-section,
+  .method-detail.is-tabbed .learn2-section[hidden] { display: block !important; }
+}

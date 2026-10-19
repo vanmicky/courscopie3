@@ -1,0 +1,238 @@
+/* ==========================================================================
+   V90 — Héros compactes (accueil + niveau)
+   --------------------------------------------------------------------------
+   Constat mesuré avant refonte :
+     • héros « niveau » : 378 px de haut, colonne de texte de 226 px seulement
+       → 152 px de vide sous les pastilles, l'illustration imposant la hauteur ;
+     • héros « accueil » : 270 px, dans un grand carton blanc, titre à 50,4 px,
+       champ de recherche flottant loin du texte ;
+     • marges verticales généreuses au-dessus de la liste des niveaux.
+
+   Parti pris : un héros est une introduction, pas une affiche. Il doit
+   présenter puis laisser la place. On cible ~200 px au lieu de 378, un titre
+   à ~2,2 rem au lieu de 3,15, une illustration bornée, et aucun vide.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Accueil : bandeau simple, plus de carton blanc
+   -------------------------------------------------------------------------- */
+.editorial-home #niveaux { padding-top: var(--ds-space-5) !important; }
+
+.home-hero {
+  background: none !important;
+  border: 0 !important;
+  border-bottom: 1px solid var(--ds-border) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 0 0 var(--ds-space-4) !important;
+  margin: 0 !important;
+}
+
+/* Texte à gauche, recherche alignée à droite sur la même ligne. */
+.home-hero .search-row {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(14rem, 20rem) !important;
+  align-items: center !important;
+  gap: var(--ds-space-6) !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.home-hero .home-hero-copy { gap: .35rem !important; }
+
+.editorial-eyebrow {
+  font-size: .68rem !important;
+  letter-spacing: .09em !important;
+  font-weight: 700 !important;
+}
+
+/* `.student-page .home-title` fige une taille dans ds-5 : on reprend la même
+   spécificité pour que la taille compacte l'emporte. */
+.student-page .home-title,
+.home-title {
+  font-size: clamp(1.5rem, 1.1rem + 1.35vw, 2.15rem) !important;
+  line-height: 1.12 !important;
+  letter-spacing: -.022em !important;
+  margin: .3rem 0 .5rem !important;
+  max-width: 26ch !important;
+}
+
+.editorial-intro { margin: 0 !important; gap: .35rem !important; }
+.editorial-intro span {
+  padding: .15rem .55rem !important;
+  font-size: .75rem !important;
+  font-weight: 600 !important;
+}
+
+.home-hero .editorial-search { align-self: center !important; }
+.home-hero .editorial-search input {
+  height: 2.5rem !important;
+  min-height: 2.5rem !important;
+  font-size: .875rem !important;
+}
+.home-hero .editorial-search > span { font-size: .72rem !important; font-weight: 650 !important; }
+
+.editorial-result-count {
+  margin: var(--ds-space-3) 0 0 !important;
+  font-size: .8rem !important;
+}
+
+/* Respiration entre le bandeau et la grille de niveaux. */
+.editorial-home .home-level-grid { margin-top: var(--ds-space-6) !important; }
+
+/* --------------------------------------------------------------------------
+   2. Niveau : héros compact, illustration bornée, plus de vide
+   -------------------------------------------------------------------------- */
+.level-page { padding-top: var(--ds-space-4) !important; }
+
+/* Le héros de niveau est une carte : marges internes franches et dégradé
+   très léger teinté de la couleur de la matière. */
+.editorial-level .level-hero {
+  padding: clamp(1.25rem, 1rem + 1vw, 1.9rem) !important;
+  margin: 0 !important;
+  border: 1px solid color-mix(in srgb, var(--accent) 22%, var(--ds-border)) !important;
+  border-radius: var(--ds-radius-lg) !important;
+  background-color: var(--ds-surface) !important;
+  background-image: linear-gradient(135deg,
+    color-mix(in srgb, var(--accent) 9%, var(--ds-surface)) 0%,
+    color-mix(in srgb, var(--accent) 3%, var(--ds-surface)) 52%,
+    var(--ds-surface) 100%) !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .04) !important;
+}
+html.dark .editorial-level .level-hero {
+  border-color: color-mix(in srgb, var(--accent) 26%, var(--ds-border)) !important;
+  background-color: var(--ds-surface) !important;
+  background-image: linear-gradient(135deg,
+    color-mix(in srgb, var(--accent) 15%, var(--ds-surface)) 0%,
+    color-mix(in srgb, var(--accent) 6%, var(--ds-surface)) 55%,
+    var(--ds-surface) 100%) !important;
+  box-shadow: none !important;
+}
+
+.editorial-level .level-hero-grid {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 300px) !important;
+  align-items: center !important;
+  gap: var(--ds-space-6) !important;
+}
+
+.editorial-level .level-hero-copy { padding-top: 0 !important; }
+
+.editorial-level .page-title {
+  font-size: clamp(1.65rem, 1.2rem + 1.5vw, 2.3rem) !important;
+  line-height: 1.12 !important;
+  letter-spacing: -.025em !important;
+  margin: .35rem 0 .45rem !important;
+  max-width: none !important;
+}
+
+.editorial-level .level-summary {
+  font-size: .95rem !important;
+  line-height: 1.55 !important;
+  max-width: 52ch !important;
+  color: var(--ds-text-soft) !important;
+}
+
+/* Pastilles de ressources : une seule rangée compacte. */
+.level-resource-strip {
+  display: flex !important;
+  flex-wrap: wrap;
+  gap: var(--ds-space-2) !important;
+  margin-top: var(--ds-space-4) !important;
+}
+.level-resource-pill {
+  flex: 0 1 auto;
+  flex-direction: row !important;
+  align-items: baseline;
+  gap: .45rem !important;
+  min-height: 0 !important;
+  padding: .6rem 1rem !important;
+  box-shadow: none !important;
+}
+.level-resource-pill strong { font-size: .82rem !important; font-weight: 700 !important; }
+.level-resource-pill span { font-size: .74rem !important; }
+
+/* Illustration : largeur bornée, donc hauteur bornée (pas de recadrage). */
+.editorial-level .level-hero-figure {
+  margin: 0 !important;
+  padding: 0 !important;
+  align-self: center !important;
+  border-radius: var(--ds-radius-lg) !important;
+  overflow: hidden;
+}
+.editorial-level .level-hero-image {
+  display: block;
+  width: 100% !important;
+  height: auto !important;
+  max-height: 190px;
+  object-fit: cover;
+  object-position: center 35%;
+  border-radius: 0 !important;
+}
+/* Le libellé « 5e · Physique-Chimie » répétait le titre : on l'enlève. */
+.editorial-level .level-hero-caption { display: none !important; }
+
+/* --------------------------------------------------------------------------
+   3. Adaptations
+   -------------------------------------------------------------------------- */
+@media (max-width: 900px) {
+  .home-hero .search-row { grid-template-columns: minmax(0, 1fr) !important; gap: var(--ds-space-3) !important; }
+  .home-hero .editorial-search { width: 100% !important; }
+}
+
+@media (max-width: 760px) {
+  .editorial-level .level-hero-grid { grid-template-columns: minmax(0, 1fr) !important; }
+  /* Sur téléphone, l'illustration ne sert à rien : on garde la place au contenu. */
+  .editorial-level .level-hero-figure { display: none !important; }
+  .level-page { padding-top: var(--ds-space-2) !important; }
+  .editorial-level .page-title { font-size: clamp(1.55rem, 1.2rem + 2vw, 1.9rem) !important; }
+}
+
+@media (max-width: 520px) {
+  .level-resource-pill { flex: 1 1 calc(50% - var(--ds-space-2)); }
+}
+
+/* --------------------------------------------------------------------------
+   4. Recherche en direct : les cartes filtrées doivent vraiment disparaître
+   --------------------------------------------------------------------------
+   `.editorial-home .level-card { display: flex !important }` (ds-3) l'emporte sur
+   `[hidden] { display: none !important }` : sur l'accueil, la recherche mettait
+   `hidden` sur les cartes mais elles restaient visibles. On reprend la main avec
+   une spécificité supérieure.
+   -------------------------------------------------------------------------- */
+.editorial-home .level-card[hidden],
+.editorial-home .level-card.hidden,
+.chapter-tile[hidden],
+.chapter-tile.hidden,
+[data-card][hidden],
+[data-card].hidden {
+  display: none !important;
+}
+
+/* --------------------------------------------------------------------------
+   Raccourcis de niveau : quatre libellés sur une seule ligne
+   --------------------------------------------------------------------------
+   Les puces portaient un titre + une description et passaient à la ligne.
+   Ne restent que les libellés, en pastilles compactes alignées.
+   -------------------------------------------------------------------------- */
+.level-resource-strip {
+  flex-wrap: nowrap !important;
+  align-items: center;
+}
+.level-resource-pill {
+  flex: 0 0 auto !important;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 0 !important;
+  min-height: 2.1rem !important;
+  padding: .38rem .9rem !important;
+  border-radius: 999px !important;
+  font-size: .82rem !important;
+  font-weight: 700 !important;
+  white-space: nowrap;
+  line-height: 1;
+}
+@media (max-width: 560px) {
+  .level-resource-strip { flex-wrap: wrap !important; }
+  .level-resource-pill { flex: 1 1 calc(50% - var(--ds-space-2)) !important; }
+}
